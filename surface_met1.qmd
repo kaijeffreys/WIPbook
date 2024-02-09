@@ -1,0 +1,25 @@
+# Using Executable files {.unnumbered}
+
+The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed [here](), produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.
+
+Running the `surface_met1` function sets up the bridge between R and the Executable files. There are a few differences between running this function versus the `surface_met` function. Since the files are run externally, the user needs to type in the file directories rather than the variable in R. Another thing to note is that currently there is not a setup to run TWI with these files, so we are limited to just the other four types of metrics
+
+## Parameters
+
+| Inputs      | Description                                                                                     |
+|--------------|----------------------------------------------------------|
+| `len`       | The length that the metrics are calculated at                                                   |
+| `metrics`   | Vector indicating which metrics to calculate. Options include "grad", "prof", "plan", and "dev" |
+| `dem_dir`   | String (text) input that indicates the file directory of the file that contains the DEM         |
+| `exec_dir`  | String input that indicates the file directory                                                  |
+| `out_dir`   | String input of the directory where the output is                                               |
+| `re_sample` | Number indicating the re-sampling rate for the DEV/local relief                                 |
+
+## Using function example
+
+```{r, eval=FALSE}
+surface_met1(len = 100, dem_dir = "../PackForest/PF_DTM3.tif",
+             metrics = c("grad", "prof", "plan"),
+             exec_dir = "../ExecutableFiles")
+
+```

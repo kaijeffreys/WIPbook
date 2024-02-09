@@ -1,0 +1,31 @@
+# Setup {.unnumbered}
+
+1.  [Install base R from CRAN](https://cran.r-project.org/)
+
+2.  [Install R Studio from Posit](https://posit.co/)
+
+3.  Run RStudio (if needed, a quality introduction to R can be found [here](https://r4ds.had.co.nz/index.html)), then install packages that may or not be needed in the code chunk below. More information on each packages as follows:
+
+    -   The main package for spatial data and statistics: `terra`. The WIP tool will simply not run if `terra` is not installed
+    -   The `MultiscaleDTM` package is a necessity if one wants to calculate the surface metrics (such as gradient, curvature, etc.) within R
+    -   The packages `randomForest`, `caret`, and `nnet` may or may not need to be installed, depending on the type of model you want to run. I recommend installing all of them just in case
+
+```{r, eval=FALSE}
+install.packages("terra")
+install.packages("MultiscaleDTM")
+install.packages("randomForest")
+install.packages("caret")
+install.packages("nnet")
+```
+
+4.  Load in the functions. Since the WIP tool is not a package as of yet, that means to run the tool, you will have to load the functions by running them directly in R. The functions are all in the **Functions** section towards the end of this document
+
+5.  (Optional) Load in the data that will be used in the tool. This step is optional because all of the functions used in the WIP tool can receive file names as inputs. However, typing out file names over and over again can be a drag, so loading them in once can be the superior option.
+
+```{r}
+dem <- terra::rast("../PackForest/PF_DTM3.tif")
+region <- terra::vect("../PackForest/PF_studyarea.shp")
+wetlands <- terra::vect("../PF_wetlands.shp")
+```
+
+The data that we loaded above to use for the document is from an area in Eatonville, WA (near Mount Rainier) called Pack Forest . It is a small land mass (making it ideal for an example), with four classified wetlands: Riverine, Freshwater Emergent Wetland, Freshwater Forested/Shrub Wetland, and Freshwater Pond. The thing variables that were just loaded are the Digital Elevation Model (DEM), a polygon file describing a area, and a polygon file describing wetlands within that area, respectively. 

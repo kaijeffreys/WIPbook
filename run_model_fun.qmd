@@ -1,0 +1,88 @@
+# run_model {.unnumbered}
+
+```{r, eval=FALSE}
+run_model <- function(mod, in_rasts = list(), poly_inputs = list(), ref_raster,
+                      model_type = "forest", class_rast = FALSE,
+                      export = FALSE) {
+  
+  # Checking if inputs are file names, then load them in
+  if(is.character(in_rasts[1])) {
+    temp_rast <- rep(list(), length(in_rasts))
+    for(i in 1:length(in_rasts)) {
+      temp_rast[[i]] <- terra::rast(in_rasts[i])
+    }
+    names(temp_rast) <- in_rasts
+    in_rasts <- temp_rast
+  }
+  
+  if(length(poly_inputs) > 0) {
+    if(is.character(poly_inputs[[1]])) {
+      temp_poly <- rep(list(), length(poly_inputs))
+      for(i in 1:length(poly_inputs)) {
+        if(!file.exists(poly_inputs[[i]])) {
+          stop(paste0("Cannot find poly input file:", poly_inputs[i]))
+        }
+        temp_poly[[i]] <- terra::vect(poly_inputs[i]) 
+      }
+      names(temp_poly) <- poly_inputs
+      poly_inputs <- temp_poly
+    }
+    for(i in 1:length(poly_inputs)) {
+      vr_name <- names(poly_inputs)[i]
+      temp_rast <- terra::rasterize(poly_inputs[i], ref_raster, field = vr_name)
+      in_rasts <- c(in_rasts, temp_rast)
+    }
+  }
+  
+  # Ensure that all inputs are covering the same area
+  print("Formatting inputs")
+  for(i in 1:length(in_rasts)) {
+    in_rasts[[i]] <- terra::project(in_rasts[[i]], ref_raster)
+    in_rasts[[i]] <- terra::crop(in_rasts[[i]], ref_raster)
+  }
+  
+  # Stacks the rasters on top of each other to create one raster
+  print("Stacking rasters")
+  input_raster <- in_rasts[[1]]
+  if(length(in_rasts) > 1) {
+    for(i in 2:length(in_rasts)) {
+      input_raster <- c(input_raster, in_rasts[[i]])
+    }
+  }
+  names(input_raster) <- names(in_rasts)
+  
+  # Run the model
+  print("Running model")
+  
+  if(class_rast) {
+    if(isTRUE(mod$call[[1]] == "glm")) {
+      output <- terra::predict(input_raster, mod, na.rm = T,
+                               type = "response")
+      vals <- terra::values(output)
+      vals <- ifelse(vals > 0.5, "WET", "UPL")
+      terra::values(output) <- vals
+      
+    } else {
+      output <- terra::predict(input_raster, mod, na.rm = T)
+    }
+    
+  } else {
+    if(isTRUE(mod$call[[1]] == "glm")) {
+      output <- terra::predict(input_raster, mod, na.rm = T,
+                               type = "response")
+    } else {
+      output <- terra::predict(input_raster, mod, na.rm = T, type = "prob")
+    }
+  }  
+  
+  if(export) {
+    for(i in 1:length(output)) {
+      file_name <- paste0(names(input_raster)[i], "prob.tif")
+      terra::writeRaster(output[[i]], filename = file_name)
+    }
+  }
+  
+  print("Done!")
+  return(output)
+}
+```

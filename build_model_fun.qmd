@@ -1,0 +1,81 @@
+# build_model {.unnumbered}
+
+```{r, eval=FALSE}
+build_model <- function(in_rasts, poly_inputs = list(), train, ref_raster,
+                        model_type = "forest", model_params = list(ntree = 200),
+                        class_field_name = "class") {
+  
+  # Checking if input rasters are file names, then load them in
+  if(is.character(in_rasts[1])) {
+    temp_rast <- rep(list(), length(in_rasts))
+    for(i in 1:length(in_rasts)) {
+      temp_rast[[i]] <- terra::rast(in_rasts[i])
+    }
+    names(temp_rast) <- in_rasts
+    in_rasts <- temp_rast
+  }
+  
+  # Checks if there are any polygon inputs
+  if(length(poly_inputs) > 0) {
+    
+    # Checking to see the polygon inputs are filenames
+    if(is.character(poly_inputs[[1]])) {
+      temp_poly <- rep(list(), length(poly_inputs))
+      for(i in 1:length(poly_inputs)) {
+        if(!file.exists(poly_inputs[[i]])) {
+          stop(paste0("Cannot find poly input file:", poly_inputs[i]))
+        }
+        temp_poly[[i]] <- terra::vect(poly_inputs[i]) 
+      }
+      names(temp_poly) <- poly_inputs
+      poly_inputs <- temp_poly
+    }
+    
+    # Rasterize polygon inputs
+    for(i in 1:length(poly_inputs)) {
+      vr_name <- names(poly_inputs)[i]
+      temp_rast <- terra::rasterize(poly_inputs[i], ref_raster, field = vr_name)
+      in_rasts <- c(in_rasts, temp_rast)
+    }
+  }
+  
+  # Ensure that all inputs are covering the same area
+  print("Formatting inputs")
+  for(i in 1:length(in_rasts)) {
+    in_rasts[[i]] <- terra::project(in_rasts[[i]], ref_raster)
+    in_rasts[[i]] <- terra::crop(in_rasts[[i]], ref_raster)
+  }
+  
+  # Set up training data
+  print("Setting up training data")
+  df_train <- data.frame(class = factor(as.vector(unlist(train[[class_field_name]]))))
+  for(i in 1:length(in_rasts)) {
+    vals <- terra::extract(in_rasts[[i]], train, ID = F)
+    df_train <- cbind(df_train, vals)
+  }
+  df_train <- na.omit(df_train)
+  colnames(df_train) <- c("class", names(in_rasts))
+  
+  # Build the model
+  print("Building model")
+  if(model_type == "forest"){
+    mod <- randomForest::randomForest(class ~ ., data = df_train, 
+                                      ntree = model_params$ntree)
+  } else if (model_type == "tree") {
+    mod <- randomForest::randomForest(class ~ ., data = df_train, ntree = 1)
+  } else if(model_type == "glm") {
+    if(length(levels(df_train$class)) > 2) {
+      mod <- nnet::multinom(class ~ ., data = df_train)
+    } else {
+      mod <- glm(class ~ ., data = df_train, family = "binomial")
+    }
+  } else if(model_type == "knn") {
+    mod <- caret::knn3(formula = class ~ ., data = df_train, k = model_params$k)
+  } else {
+    stop("Incorrect model type")
+  }
+  
+  print("Done!")
+  return(mod)
+}
+```

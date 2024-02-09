@@ -2,13 +2,24 @@ project:
   type: book
 
 book:
-  title: "WIPbook"
-  date: "2024"
+  title: "WIP Tutorial"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
-    - references.qmd
+    - setup.qmd
+    - part: functions.qmd
+      chapters:
+        - train_pts_fun.qmd
+        - fun_s1.qmd
+        - fun_s.qmd
+        - build_model_fun.qmd
+        - run_model_fun.qmd
+    - train_pts.qmd
+    - part: metrics.qmd
+      chapters: 
+        - surface_met1.qmd
+        - surface_met.qmd
+    - build_model.qmd
+    - run_model.qmd
   page-navigation: true
 
 bibliography: references.bib

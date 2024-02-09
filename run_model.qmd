@@ -1,0 +1,61 @@
+# Running Model {.unnumbered}
+
+```{r, echo=FALSE, message=FALSE, results='hide'}
+dem <- terra::rast("Data/PF_DTM3.tif")
+multi_pts <- terra::vect("Data/multi_pts.shp")
+simple_pts <- terra::vect("Data/multi_pts.shp")
+elev1 <- list(grad20 = terra::rast("Data/grad20.tif"),
+              prof20 = terra::rast("Data/prof20.tif"),
+              plan20 = terra::rast("Data/plan20.tif"))
+elev2 <- list(grad100 = terra::rast("Data/grad100.tif"),
+              prof100 = terra::rast("Data/prof100.tif"),
+              plan100 = terra::rast("Data/plan100.tif"))
+elev3 <- list(twi10 = terra::rast("Data/twi10.tif"))
+load("fun.RData")
+multi_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+                         train = multi_pts, ref_raster = dem,
+                         class_field_name = "class")
+
+simple_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+                         train = simple_pts, ref_raster = dem)
+```
+
+We have surface metrics and have built a model. Now it is time to run the model, which means it is finally time to make predictions and/or obtain probabilities. To accomplish this, we use the `run_model` function. The function either returns a classification raster or a set of probability rasters, depending on your choice.
+
+
+## Parameters
+
+| Inputs        | Description                                                                                                                         |
+|--------------|----------------------------------------------------------|
+| `in_rasts`    | List input that contains all the rasters that are chosen to be included in the model                                                |
+| `poly_inputs` | List input that contains the polygons that are chosen to be included in the model, if any                                           |
+| `ref_raster`  | Spatial raster input of the reference raster, which is used to align all of the other inputs. The DEM is usually a good choice here |
+| `model_type`  | String input indicating type of machine learning model. Options include "forest", "tree", "glm", and "knn"                          |
+| `class_rast`  | Binary parameter that determines whether the output will be probability rasters or a classification raster                          |
+| `export`      | Binary parameter that determines whether or not the function exports the output to a file                                           |
+
+## Executing the function
+
+```{r}
+prob_multi <- run_model(multi_mod, 
+                        in_rasts = c(elev1, elev2, elev3),
+                        ref_raster = dem)
+
+prob_simple <- run_model(simple_mod, 
+                        in_rasts = c(elev1, elev2, elev3),
+                        ref_raster = dem)
+
+prob_multi
+```
+
+## Classification Option
+
+Instead of returning probabilities, the `run_model` function also has an option to return a classification raster. This is often useful for when we testing the model to predict multiple types of wetlands (multi-class classification), since it is easier to comprehend one prediction rather than lots of probabilities.
+
+```{r}
+class_multi <- run_model(multi_mod, class_rast = TRUE,
+                        in_rasts = c(elev1, elev2, elev3),
+                        ref_raster = dem)
+
+class_multi
+```

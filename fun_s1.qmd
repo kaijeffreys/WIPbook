@@ -1,0 +1,79 @@
+# surface_met1 {.unnumbered}
+
+```{r, eval = FALSE}
+surface_met1 <- function(len, metrics = c("grad", "plan", "prof", "dev"),
+                         dem_dir, exec_dir, out_dir=getwd(), re_sample = NA) {
+  
+  # Checking to see if directories exist
+  if(!file.exists(dem_dir)) {
+    stop("DEM directory does not exist!")
+  }
+  
+  if(!dir.exists(exec_dir)) {
+    stop("Executable Files directory does not exist!")
+  }
+  
+  # Prepare inputs
+  dem_dir <- normalizePath(dem_dir)
+  out_dir <- normalizePath(out_dir)
+  if(!endsWith(out_dir, "\\")) {
+    out_dir <- paste0(out_dir, "\\")
+  }
+  exec_dir <- normalizePath(exec_dir)
+  
+  # Write input file
+  file_name <- paste0(out_dir, "input_makeGrids.txt")
+  file.create(file_name)
+  
+  writeLines(c("# Input file for makeGrids",
+               "",
+               paste0("DEM: ", dem_dir),
+               paste0("SCRATCH DIRECTORY: ", out_dir),
+               paste0("LENGTH SCALE: ", len)), con = file_name)
+  
+  if("grad" %in% metrics) {
+    write(paste0("GRID: GRADIENT, OUTPUT FILE = ", out_dir, "grad", len, ".flt"),
+          file = file_name, append = T) 
+  }
+  
+  if("plan" %in% metrics) {
+    write(paste0("GRID: PLAN CURVATURE, OUTPUT FILE = ", out_dir,
+                 "plan", len), file = file_name, append = T)
+  }
+  
+  if("prof" %in% metrics) {
+    write(paste0("GRID: PROFILE CURVATURE, OUTPUT FILE = ", out_dir,
+                 "prof", len), file = file_name, append = T)
+  }
+  
+  # Run surface metrics sans DEV
+  system(paste0(exec_dir, "\\makeGrids"), input = file_name)
+  
+  # Writing input file for DEV
+  if ("dev" %in% metrics) {
+    if(is.na(re_sample)) {
+      stop("Set re_sample level")
+    }
+    
+    # Prepare inputs
+    file_name <- paste0(out_dir, "input_localRelief.txt")
+    rad <- len / 2
+    
+    # Create and write input file
+    file.create(file_name)
+    writeLines(c("# Input file for LocalRelief",
+                 "# Creating by surfaceMetrics.R",
+                 paste0("# On ", Sys.time()),
+                 paste0("DEM: ", dem_dir),
+                 paste0("SCRATCH DIRECTORY: ", out_dir),
+                 paste0("RADIUS: ", rad),
+                 paste0("DOWN SAMPLE: ", re_sample),
+                 paste0("SAMPLE INTERVAL: ", re_sample),
+                 paste0("OUTPUT LOCAL RASTER: ", out_dir, "local", len)),
+               con = file_name)
+    
+    # Run DEV in console
+    system(paste0(exec_dir, "\\localRelief"), input = file_name)
+  }
+}
+```

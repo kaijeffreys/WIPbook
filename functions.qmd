@@ -1,0 +1,5 @@
+---
+title: "Functions"
+---
+
+This section contains all of the functions mentioned throughout this whole book.

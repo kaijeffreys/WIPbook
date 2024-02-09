@@ -1,0 +1,19 @@
+# Surface Metrics {.unnumbered}
+
+Also known as topographical indices, surface metrics are a key component of the model. They are able to capture the variability of topographic features conducive to wetland formation (think of how rivers and lakes make distinct divots into the ground around them), making this type of information is extremely useful. Starting with a DEM or a DTM (Digital Terrain Model), the functions derive the following types of surface metrics.
+
+## Types of Metrics
+
+There are five types of surface metrics that we are currently able to calculate here: gradient, planar curvature, profile curvature, local relief, and topographical wetness index (TWI).
+
+-   **Gradient**: essentially just the rate of change in elevation
+
+-   **Profile curvature**: the curvature in the direction of the maximum slope![](Data/profcurv.png){width="80%"}
+
+-   **Planar curvature**: the curvature that is perpendicular to the direction of the maximum slope (sideways curvature)![](Data/plancurv.png){width="80%"}
+
+-   **Local relief (DEV)**: is the representation of where a spot is in elevation in comparison to its surroundings
+
+-   **TWI**: essentially a model of how water will flow beneath the surface, calculated from topography attributes
+
+To calculate the above metrics, we have two different choices of function. One calculates the metrics in R, while the other function connects to a set of external files, called *Executable Files*.

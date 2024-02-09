@@ -1,0 +1,118 @@
+# surface_met {.unnumbered}
+
+```{r, eval=FALSE}
+surface_met <- function(DEM, len, export = FALSE,
+                        elev_dev = c("grad", "plan", "prof", "dev", "twi")) {
+  # Checks if inputs are file names and loads them in
+  if(is.character(DEM)) {
+    if(!file.exists(DEM)) {
+      stop("Cannot find DEM file")
+    }
+    DEM <- terra::rast(DEM)
+  }
+  # Sets up the resolution
+  k <- round(len/terra::res(DEM)[1])
+  if (k %% 2 == 0) {
+    k <- k + 1
+  }
+  
+  # Initialize the inputs for the model
+  in_rast <- list()
+  
+  if("grad" %in% elev_dev) {
+    j <- k/2 - 0.5
+    
+    xl.end <- matrix(c(1, rep(NA_real_, times=k-1)), ncol=k, nrow=1)
+    xr.end <- matrix(c(rep(NA_real_, times=k-1), 1), ncol=k, nrow=1)
+    
+    x.mids <- matrix(NA_real_, ncol=k, nrow=j-1)
+    
+    xl.mid <- matrix(c(2, rep(NA_real_, times=k-1)), ncol=k, nrow=1)
+    xr.mid <- matrix(c(rep(NA_real_, times=k-1), 2), ncol=k, nrow=1)
+    
+    xl.mat <- rbind(xl.end, x.mids, xl.mid, x.mids, xl.end)
+    xr.mat <- rbind(xr.end, x.mids, xr.mid, x.mids, xr.end)
+    
+    yt.end <- matrix(c(1, rep(NA_real_, times=k-1)), ncol=1, nrow=k)
+    yb.end <- matrix(c(rep(NA_real_, times=k-1), 1), ncol=1, nrow=k)
+    
+    y.mids <- matrix(NA_real_, ncol=j-1, nrow=k)
+    
+    yt.mid <- matrix(c(2, rep(NA_real_, times=k-1)), ncol=1, nrow=k)
+    yb.mid <- matrix(c(rep(NA_real_, times=k-1), 2), ncol=1, nrow=k)
+    
+    yt.mat <- cbind(yt.end, y.mids, yt.mid, y.mids, yt.end)
+    yb.mat <- cbind(yb.end, y.mids, yb.mid, y.mids, yb.end)
+    
+    dz.dx.l <- terra::focal(DEM, xl.mat, fun=sum, na.rm=T, na.policy = "omit")
+    dz.dx.r <- terra::focal(DEM, xr.mat, fun=sum, na.rm=T, na.policy = "omit")
+    dz.dy.t <- terra::focal(DEM, yt.mat, fun=sum, na.rm=T, na.policy = "omit")
+    dz.dy.b <- terra::focal(DEM, yb.mat, fun=sum, na.rm=T, na.policy = "omit")
+    
+    wts.l <- terra::focal(!is.na(DEM), w=xl.mat, fun=sum, na.rm=TRUE,
+                          na.policy = "omit")
+    wts.r <- terra::focal(!is.na(DEM), w=xr.mat, fun=sum, na.rm=TRUE,
+                          na.policy = "omit")
+    wts.t <- terra::focal(!is.na(DEM), w=yt.mat, fun=sum, na.rm=TRUE,
+                          na.policy = "omit")
+    wts.b <- terra::focal(!is.na(DEM), w=yb.mat, fun=sum, na.rm=TRUE,
+                          na.policy = "omit")
+    dz.dx <- ((dz.dx.r/wts.r) - (dz.dx.l/wts.l))/(2*j*terra::xres(DEM))
+    dz.dy <- ((dz.dy.t/wts.t) - (dz.dy.b/wts.b))/(2*j*terra::yres(DEM))
+    
+    grad <- sqrt(dz.dx^2 + dz.dy^2)
+    in_rast <- c(in_rast, grad)
+    
+    names(in_rast)[length(in_rast)] <- paste0("grad", len)
+  }
+  
+  if("plan" %in% elev_dev) {
+    if ("prof" %in% elev_dev) {
+      both <- MultiscaleDTM::Qfit(DEM, metrics = c("planc", "profc"),
+                                  w = k, na.rm = T)
+      in_rast <- c(in_rast, both[[1]], both[[2]])
+      
+      names(in_rast)[length(in_rast)-1] <- paste0("plan", len)
+      names(in_rast)[length(in_rast)] <- paste0("prof", len)
+    } else {
+      plan <- MultiscaleDTM::Qfit(DEM, metrics = "planc", w = k, na.rm = T)
+      in_rast <- c(in_rast, plan)
+      
+      names(in_rast)[length(in_rast)] <- paste0("plan", len)
+    }
+  } else if("prof" %in% elev_dev) {
+    prof <- MultiscaleDTM::Qfit(DEM, metrics = "profc", w = k, na.rm = T)
+    in_rast <- c(in_rast, prof)
+    
+    names(in_rast)[length(in_rast)] <- paste0("prof", len)
+  }
+  
+  if("dev" %in% elev_dev) {
+    dev <- (DEM - focal(DEM, w = k, fun = "mean", na.rm = T, na.policy = "omit")) / focal(DEM, w = k, fun = "sd", na.rm = T, na.policy = "omit") 
+    in_rast <- c(in_rast, rast_dev)
+    
+    names(in_rast)[length(in_rast)] <- paste0("dev", len)
+  }
+  
+  if("twi" %in% elev_dev) {
+    topidx <- topmodel::topidx(terra::as.matrix(DEM), res = terra::res(DEM)[1])
+    a <- terra::setValues(DEM, topidx$area)
+    twi <- a / tan(terra::terrain(DEM, unit = "radians"))
+    terra::values(twi) <- ifelse(terra::values(twi) < 0, 0, terra::values(twi))
+    twi <- terra::focal(twi, w = k, mean, na.rm = T, na.policy = "omit")
+    
+    in_rast <- c(in_rast, twi)
+    
+    names(in_rast)[length(in_rast)] <- paste0("twi", len)
+  }
+  
+  # Exports the surface metrics
+  if(export) {
+    for(i in 1:length(in_rast)) {
+      writeRaster(in_rast[[i]],
+                  filename = paste0(names(in_rast[i]), len, ".tif"))
+    }
+  }
+  return(in_rast)
+}
+```
