@@ -1,0 +1,56 @@
+# K-Nearest Neighbors {.unnumbered}
+
+```{r, echo=FALSE}
+dem <- terra::rast("Data/PF_DTM3.tif")
+multi_pts <- terra::vect("Data/multi_pts.shp")
+simple_pts <- terra::vect("Data/simple_pts.shp")
+elev1 <- list(grad20 = terra::rast("Data/grad20.tif"),
+              prof20 = terra::rast("Data/prof20.tif"),
+              plan20 = terra::rast("Data/plan20.tif"))
+elev2 <- list(grad100 = terra::rast("Data/grad100.tif"),
+              prof100 = terra::rast("Data/prof100.tif"),
+              plan100 = terra::rast("Data/plan100.tif"))
+elev3 <- list(twi10 = terra::rast("Data/twi10.tif"))
+load("Data/fun.RData")
+```
+
+## Description
+
+Last, but not least, we have reached the k-Nearest Neighbors machine learning algorithm. This one (may) be the easiest to comprehend. How it works is that it finds a certain number of observations, $k$ to be exact, that have features (the input data) that most closely match the observation we are trying to predict. We will call these close observations *neighbors*. Using those neighbors, the model predicts the class by picking the class that has the highest number of neighbors. For probabilities, it uses the proportion of neighbors of that class out of the total. Here is an example below.
+
+```{r, echo=FALSE, fig.cap="Two classes of train data; gold diamond is new observation"}
+set.seed(100)
+plot(x = 1, y = 1, col = "gold", pch = 18, xlim = c(0.75, 2),
+     ylim = c(0.75,2), xlab = "x", ylab = "y", cex = 2)
+points(x = c(1.05, 1.4, 1.7, 1.4, 1.6), 
+       y = c(1.05, 1.5, 1.7, 1.7, 1.9),
+       pch = 19, col = "red")
+points(x = runif(5, 0.8, 0.95),
+       y = runif(5, 0.8, 1),
+       pch = 19, col = "blue")
+legend("bottomright", legend = c("Class 1", "Class 2"), col = c("blue", "red"), pch = 19)
+```
+
+From the example above, we see how the decision can change with different levels of $k$. If $k=1$, then the decision would be `Class 2`, since the closest point to the diamond point is red. However, with any number of neighbors higher than $2$, then decision would be `Class 2`.
+
+One piece of advice is to normally choose either an odd number or a large number for $k$. This significantly lessens the chance that there is a tie when the model makes a decision. As a result, it might also be a good idea to run it with a larger amount of training points.
+
+## Examples of Use
+
+```{r}
+multi_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+                       train = multi_pts, ref_raster = dem,
+                       model_type = "knn",
+                       model_params = list(k = 15))
+
+simple_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+                       train = simple_pts, ref_raster = dem,
+                       model_type = "knn",
+                       model_params = list(k = 5))
+```
+
+The returned output is a list that contains the input data and the predicts. As we run the object below, we can see the number the model predicted for each class
+
+```{r}
+multi_mod
+```

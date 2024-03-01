@@ -2,10 +2,24 @@ project:
   type: book
 
 book:
-  title: "WIP Tutorial"
+  title: "Guide to Running the Wetland Intrinsic Potential (WIP) Tool in R"
   chapters:
     - index.qmd
     - setup.qmd
+    - train_pts.qmd
+    - part: metrics.qmd
+      chapters: 
+        - surface_met1.qmd
+        - surface_met.qmd
+    - part: build_model.qmd
+      chapters: 
+        - tree.qmd
+        - forest.qmd
+        - glm.qmd
+        - knn.qmd
+    - run_model.qmd
+    - test.qmd
+    - extra.qmd
     - part: functions.qmd
       chapters:
         - train_pts_fun.qmd
@@ -13,22 +27,48 @@ book:
         - fun_s.qmd
         - build_model_fun.qmd
         - run_model_fun.qmd
-    - train_pts.qmd
-    - part: metrics.qmd
-      chapters: 
-        - surface_met1.qmd
-        - surface_met.qmd
-    - build_model.qmd
-    - run_model.qmd
+        - cv_err_fun.qmd
   page-navigation: true
+  sidebar: 
+    title: false
+    
+  navbar:
+    title: "The WIP Tool"
+    background: info
+    foreground: secondary
+    right:
+      - text: "Downloads"
+        menu: 
+        - text: "Manual"
+          href: pdf_manual.pdf
+        - text: "WIP Template"
+          href: template.rmd
+        - text: "Functions"
+          href: Data/fun.RData
+      - text: "Example Data"
+        menu:
+        - text: "DEM"
+          href: Data/PF_DTM3.tif
+        - text: "Study Area"
+          href: Data/PF_studyarea.shp
+        - text: "Wetlands"
+          href: Data/PF_wetlands.shp
+      - icon: github
+        url: https://github.com/kaijeffreys/WIPbook
+    search: true
+    pinned: true
 
 bibliography: references.bib
 
 format:
   html:
     theme: zephyr
+    toc-title: "On this page"
   pdf:
-    documentclass: scrreprt
+    documentclass: book
+    toc: true
+    number-sections: false
+    colorlinks: true
 
 editor: visual
 

@@ -1,0 +1,179 @@
+---
+title: "WIP Template"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initialize Set Up
+### Download software packages
+Downloading all of these packages is necessary conduct all of the operations described in the tool
+
+```{r packages}
+install.packages("terra")
+install.packages("MultiscaleDTM")
+install.packages("randomForest")
+install.packages("caret")
+install.packages("nnet")
+```
+
+### Load in the functions
+Functions can be loaded in buy loading in the `.RData` file containing them (which can be downloaded from the book), or copy/pasting the code.
+
+```{r functions}
+load("fun.RData")
+```
+
+### Load in files
+These files could include a DEM, training points, other rast files, or polygon files. To do this, type in either the `terra::rast()` function or the `terra::vect()` function and then add the directory of the file inside. An example of how to do this is shown below
+
+```{r data load}
+dem <- terra::rast("PF_DTM3.tif")
+region <- terra::vect("PF_studyarea.shp")
+wetlands <- terra::vect("PF_wetlands.shp")
+```
+
+The data loaded above can be found under the **Example Data** tab of the book
+
+# Build training points
+To generate training points in R, we need a shape region polygon as well as a polygon file of the wetlands. Also will likely need to indicate the types of wetlands/meadows included in the wetlands polygon. In addition, we can indicate whether or not to create a multi class (instead of just wet/not) set of points or not with `multi_class`
+
+```{r training points binary}
+simple_pts <- build_train_pts(region_poly = region,
+                             wet_poly = wetlands,
+                             wet_types = c("Riverine", 
+                                           "Freshwater Emergent Wetland",
+                                           "Freshwater Forested/Shrub Wetland",
+                                           "Freshwater Pond"),
+                             multi_class = FALSE)
+```
+
+```{r multiclass training points}
+multi_pts <- build_train_pts(region_poly = region,
+                             wet_poly = wetlands,
+                             wet_types = c("Riverine", 
+                                           "Freshwater Emergent Wetland",
+                                           "Freshwater Forested/Shrub Wetland",
+                                           "Freshwater Pond"),
+                             sample_points = c(20, 150),
+                             multi_class = TRUE)
+```
+
+# Create elevation derivatives
+## Using Executable Files
+For the first way to calculate metrics, we will use the `surface_met1` function. To run it, we will need to type in the length (denoted `len` in the function), as well as the directories of the DEM and the Executable files. There is another input to choose which of the metrics to compute. The outputs of this function are sent externally.
+
+```{r fortran metrics}
+surface_met1(len = 100, dem_dir = "Data/PF_DTM3.tif",
+             metrics = c("grad", "prof", "plan"),
+             exec_dir = "../ExecutableFiles")
+```
+
+## Completely in R:
+The second option stays in R, so there does not need to be a connection to a set of external files. In order to run this option, the `surface_met` function, the DEM, the length (again as `len`), and the choice of metrics (this time under `elev_dev`) need to be placed inside., as shown below
+
+```{r metricsr}
+elev1 <- surface_met(dem, len = 20,
+                     elev_dev = c("grad", "prof", "plan"))
+elev2 <- surface_met(dem, len = 100,
+                     elev_dev = c("grad", "prof", "plan"))
+elev3 <- surface_met(dem, len = 10, elev_dev = c("twi"))
+```
+
+# Build the model
+The next step is building the model, also known as model training. To do this in R, we have the `build_model` function. The inputs for the function are the input data (rasters or both rasters and polygons), the training points, and the reference raster (used to make sure the input data all aligns). We can also indicated the type of model (under `model_type`). Depending on the type of model (such as knn), we also might need to add needed model parameters in the `model_param` input
+
+## Binary models
+```{r binary models}
+mod1 <- build_model(in_rasts = elev1, train = simple_pts,
+                    ref_raster = dem)
+mod2 <- build_model(in_rasts = c(elev1, elev2, elev3),
+                    train = simple_pts, ref_raster = dem)
+mod3 <- build_model(in_rasts = c(elev1, elev2, elev3), 
+                    train = simple_pts, model_type = "glm",
+                    ref_raster = dem)
+mod4 <- build_model(in_rasts = c(elev1, elev2, elev3),
+                    train = simple_pts, model_type = "knn",
+                    model_params = list(k = 15), 
+                    ref_raster = dem)
+```
+
+## Multi-class models
+```{r multiclass models}
+mod5 <- build_model(in_rasts = elev1, train = multi_pts,
+                    ref_raster = dem)
+mod6 <- build_model(in_rasts = c(elev1, elev2, elev3),
+                    train = multi_pts, ref_raster = dem)
+mod7 <- build_model(in_rasts = c(elev1, elev2, elev3), 
+                    train = multi_pts, model_type = "glm",
+                    ref_raster = dem)
+mod8 <- build_model(in_rasts = c(elev1, elev2, elev3),
+                    train = multi_pts, model_type = "knn",
+                    model_params = list(k = 15), 
+                    ref_raster = dem)
+```
+
+
+## Get an estimate of the error of the model
+The `CV_err` function provides an estimate of the model error. The function has the same inputs as the `build_model` function, though it has an additional `kfold` parameter, which indicates the number of times the error is calculated (default is set to 5).
+
+```{r test model}
+CV_err(in_rasts = elev1, train = simple_pts, ref_raster = dem,
+       kfold = 5)
+CV_err(in_rasts = c(elev1, elev2, elev3), train = simple_pts,
+       ref_raster = dem)
+CV_err(in_rasts = c(elev1, elev2, elev3), train = simple_pts,
+       ref_raster = dem, model_type = "glm")
+```
+
+
+# Run the model
+To run the model (which is how we get probability or classification rasters), we will use the `run_model` function. The function takes in the model, the input metrics, the reference raster. One last parameter is whether to return a classification or probability, with `class_rast`
+
+## Binary models
+```{r running binary models}
+prob1 <- run_model(mod1, elev1, ref_raster = dem)
+prob2 <- run_model(mod2, c(elev1, elev2, elev3),
+                   ref_raster = dem)
+prob3 <- run_model(mod3, c(elev1, elev2, elev3),
+                   ref_raster = dem)
+prob4 <- run_model(mod4, c(elev1, elev2, elev3),
+                   ref_raster = dem)
+```
+
+## Multi-class models
+```{r running multiclass models}
+prob5 <- run_model(mod5, elev1, ref_raster = dem)
+prob6 <- run_model(mod6, c(elev1, elev2, elev3),
+                   ref_raster = dem)
+prob7 <- run_model(mod7, c(elev1, elev2, elev3),
+                   ref_raster = dem)
+prob8 <- run_model(mod8, c(elev1, elev2, elev3),
+                   ref_raster = dem)
+```
+
+## Classfication option
+As you can see below, the difference between the following code and what shown above is that now `class_rast=T` (the default is set to false, which is why that parameter does not appear above)
+
+```{r running classifications}
+class1 <- run_model(mod1, elev1, ref_raster = dem,
+                    class_rast = T)
+class6 <- run_model(mod6, c(elev1, elev2, elev3),
+                   ref_raster = dem, class_rast = T)
+class8 <- run_model(mod8, c(elev1, elev2, elev3),
+                   ref_raster = dem, class_rast = T)
+```
+
+## Plot the results of the model
+To plot the results, we will need to use the `plot` function in the `terra` package. Only thing that needs to be placed inside the function is the object that we want to plot (such as the probability raster). Other options to add are the plot title (from `main =`) or colors (`col = `).
+
+```{r plotting}
+terra::plot(prob1["WET"], main = "Wetlands Probability (Simple)")
+terra::plot(prob2["WET"],
+            main = "Wetlands Probability (Complex)")
+terra::plot(prob3, main = "Wetlands Probability (Logistic)")
+terra::plot(prob4["WET"],  main = "Wetlands Probability (knn)")
+terra::plot(class6, main = "Predicted Type of Meadow")
+```

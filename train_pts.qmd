@@ -3,18 +3,17 @@
 ```{r, echo=FALSE}
 region <- terra::vect("Data/PF_studyarea.shp")
 wetlands <- terra::vect("Data/PF_wetlands.shp")
-load("fun.RData")
+load("Data/fun.RData")
 ```
 
 In order to be able to build a model that calculates wetland probabilities, we first need to have points to train the model (it has to gain knowledge from somewhere). That is what the `build_train_pts` function is here to accomplish. Using polygon data of both wetlands and the area of interest (these are best obtained from the National Wetlands Inventory, or NWI), the function will randomly sample both wetland (including an option doing so for multiple wetland types) and non-wetland points.
 
 This step can be done either before or after calculating surface metrics, but neither can be done before building the model.
 
-
 ## Parameters
 
 | Inputs          | Description                                                                                                                                                                        |
-|-------------|-----------------------------------------------------------|
+|----------------|--------------------------------------------------------|
 | `region_poly`   | Polygon (shape file) input that contains the shape of the whole area of interest                                                                                                   |
 | `wet_poly`      | Polygon input that contains areas where the (known) wetlands are located                                                                                                           |
 | `multi_class`   | Binary variable indicating whether or not to return points from each of the wetland types or just have binary wetland/non-wetland points                                           |
@@ -25,7 +24,7 @@ This step can be done either before or after calculating surface metrics, but ne
 
 ## Running training points
 
-```{r}
+```{r, warning=FALSE}
 simple_pts <- build_train_pts(region_poly = region,
                              wet_poly = wetlands,
                              wet_types = c("Riverine", 
@@ -35,7 +34,7 @@ simple_pts <- build_train_pts(region_poly = region,
                              multi_class = FALSE)
 ```
 
-```{r}
+```{r, warning=FALSE}
 multi_pts <- build_train_pts(region_poly = region,
                              wet_poly = wetlands,
                              wet_types = c("Riverine", 
@@ -44,13 +43,33 @@ multi_pts <- build_train_pts(region_poly = region,
                                            "Freshwater Pond"),
                              sample_points = c(20, 150),
                              multi_class = TRUE)
+```
+
+If you run this function, as is done above, it returns a Spatvector input of points, with some labeled as UPL (for upland) and others either labeled as WET or, if chosen `multi_class`, the particular type of wetland (such as Freshwater Pond), as shown below.
+
+```{r}
 multi_pts
 ```
 
-If you run this function, as is done above, it returns a Spatvector input of points, with some labeled as UPL (for upland) and others either labeled as WET or, if chosen `multi_class`, the particular type of wetland (such as Freshwater Pond).
+Here's a visual of what the training points look like
 
-If you run the function without specifying the `wet_type`, it might still run (especially if the data was obtained from NWI), but it will also likely give warnings, for some wetland types that are not present in the file, as shown below. So be warned.
+```{r, echo=FALSE}
+terra::plot(region, main = "Binary Training Points",
+            col = "wheat", border = F)
+terra::polys(wetlands, border = F, col = "dodgerblue")
+terra::points(simple_pts[simple_pts$class == "UPL"], col = "brown")
+terra::points(simple_pts[simple_pts$class == "WET"],
+              col = "darkblue")
+terra::add_legend("bottomleft", legend = c("UPL", "WET"),
+                  col = c("brown","darkblue"), pch = 20)
+```
 
-```{r}
+If you run the function without specifying the `wet_type`, it might still run (especially if the data was obtained from NWI), but it will also likely give warnings, for some wetland types that are not present in the file, as shown below.
+
+```{r, warning=FALSE}
 build_train_pts(region, wetlands)
 ```
+
+## External Training Points
+
+If you obtained a set of training points through some sort of external source, the following functions will still work, as long as there are points on the same area as what is set as the `ref_raster`, which will be discussed more later. In other words, the training points can use a different projection system or spatial extent and still work

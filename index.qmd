@@ -1,10 +1,11 @@
+![](Pics/lil_lake_rainier.jpg)
+
 # Preface {.unnumbered}
 
-![](Data/hoh_ex.png)
+Wetland inventories are essential for tracking loss of wetlands. The WIP tool was developed to identify wetlands that are missing from existing wetland inventories. Our wetland indicator framework, which includes spatial variables representing vegetation, hydrology, soils, and multi-scale topographic attributes can be used to quantify probability of wetland occurrence, as well as predict the type of wetland. Our wetland indicator framework provides a flexible approach that can be adapted to identify diverse wetland types across varied landscapes. The reasoning behind this framework is shown below
 
-Wetland inventories are essential for tracking loss of wetlands. The WIP tool was developed to identify wetlands that are missing from existing wetland inventories. Our wetland indicator framework, which includes spatial variables representing vegetation, hydrology, soils, and multi-scale topographic attributes can be used to quantify probability of wetland occurrence, as well as predict the type of wetland. Our wetland indicator framework provides a flexible approach that can be adapted to identify diverse wetland types across varied landscapes. This framework is shown below
-
-![](Data/indices.png)
+![](Pics/indices.png)
 
 The following article provides a skeleton of how to run this tool in the R programming language. It must be noted that there are some things, including many of the wetland indicators, like vegetation and soils, that must be obtained externally for now. However, the development of topographical indices and everything to do with the building and running of the model, can be run in R.
 
+![Example of WIP Tool in Hoh Rainforest](Pics/hoh_ex.png)

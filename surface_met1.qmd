@@ -1,6 +1,6 @@
 # Using Executable files {.unnumbered}
 
-The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed [here](), produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.
+The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed [here](https://github.com/TerrainWorks-Seattle/ForestedWetlands), produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.
 
 Running the `surface_met1` function sets up the bridge between R and the Executable files. There are a few differences between running this function versus the `surface_met` function. Since the files are run externally, the user needs to type in the file directories rather than the variable in R. Another thing to note is that currently there is not a setup to run TWI with these files, so we are limited to just the other four types of metrics
 
@@ -18,8 +18,26 @@ Running the `surface_met1` function sets up the bridge between R and the Executa
 ## Using function example
 
 ```{r, eval=FALSE}
-surface_met1(len = 100, dem_dir = "../PackForest/PF_DTM3.tif",
+surface_met1(len = 100, dem_dir = "Data/PF_DTM3.tif",
              metrics = c("grad", "prof", "plan"),
              exec_dir = "../ExecutableFiles")
 
+```
+
+The functions creates a `.txt` file named `input_makeGrids` (or `input_localRelief` for DEV) which, as the name suggests, is an input file for the Executable Files. It lists all the important file directories (including the outputs), as well as the length scale that the metrics will be calculated at.
+
+### Visuals of example
+
+Here is what a map of gradient looks like at 100 meter length scale, calculated above.
+
+```{r, echo=FALSE}
+terra::plot(terra::rast("Data/grad100.flt"), 
+            main = "Gradient Calculated at 100m")
+```
+
+As for the curvatures, the minute differences might be hard to see on a visualization, but rest assured, the assumed minute differences are still important in the models that are calculated later on.
+
+```{r, echo=FALSE}
+terra::plot(terra::rast("Data/plan100.flt"), 
+            main = "Planar Curvature at 100m")
 ```

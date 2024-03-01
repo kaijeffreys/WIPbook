@@ -2,24 +2,23 @@
 
 ```{r, echo=FALSE}
 dem <- terra::rast("Data/PF_DTM3.tif")
-load("fun.RData")
+load("Data/fun.RData")
 ```
 
 Now, we will go into the function that calculates the metrics internally, `surface_met`. This option is less complicated to get to work, but also comes with drawbacks. It will not only take longer to run, but also has slightly less accurate results.
 
 This function can calculate any and all five of the types of metrics described above. The default is to calculate all five, but that can be changed with a different input of `elev_dev` .
 
-
-### Parameters
+## Parameters
 
 | Inputs     | Description                                                                                                         |
-|-------------|-----------------------------------------------------------|
+|------------|---------------------------------------------------------------------------------------------------------------------|
 | `DEM`      | As the name suggests, this input is the DEM/DTM                                                                     |
 | `len`      | Number input represents the length at which the metric is calculated                                                |
 | `elev_dev` | Vector input of selection of metrics. The choices are "grad", "prof", "plan", "dev", "twi"                          |
 | `export`   | This is a binary (true/false) parameter that determines whether or not the function exports the output(s) to a file |
 
-### Using the function
+## Using the function
 
 ```{r, warning=FALSE}
 elev1 <- surface_met(dem, len = 20, elev_dev = c("grad", "prof", "plan"))
@@ -28,3 +27,27 @@ elev3 <- surface_met(dem, len = 10, elev_dev = c("twi"))
 ```
 
 A progress bar is printed below a few of the functions, in case you were wondering what those odd lines were. This is added so that the user can have some semblance of how much is left to run. Most of the functions within the entirety of the tool do something similar, as they will often take some time to run.
+
+### Visualizing output
+
+```{r, echo=FALSE}
+terra::plot(elev2$grad100, main = "Gradient at 100m")
+```
+
+As we can see, the shape is similar to the one calculated by the Executable Files, though the scale is a little different
+
+For the types of curvature, the edges are puffed up, as shown below.
+
+```{r, echo=FALSE}
+terra::plot(elev2$plan100, main = "Planar Curvature at 100m")
+```
+
+This is done to ensure that data is not eliminated, since the other option would make it so that plenty of area around the edges would be eliminated, exponentially so with larger length scales. These will get smoothed out later on in the WIP process, so the final output will not look like this.
+
+One last visualization that you might find interesting is how the TWI looks, so this is shown below.
+
+```{r, echo=FALSE}
+col_fun <- colorRampPalette(c("gray95", "darkblue"))
+terra::plot(elev3$twi10, main = "Topographical Wetness Index",
+            col = col_fun(length(terra::values(elev3$twi10))))
+```

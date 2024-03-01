@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>WIP Tutorial - Using Executable files</title>
+<title>Guide to Running the Wetland Intrinsic Potential (WIP) Tool in R - Using Executable files</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,7 +58,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
@@ -76,11 +75,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 20,
   "language": {
     "search-no-results-text": "No results",
@@ -99,11 +98,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating nav-fixed">
 
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">The WIP Tool</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-downloads" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Downloads</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
+        <li>
+    <a class="dropdown-item" href="./pdf_manual.pdf" rel="" target="">
+ <span class="dropdown-text">Manual</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./template.rmd" rel="" target="">
+ <span class="dropdown-text">WIP Template</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Data/fun.RData" rel="" target="">
+ <span class="dropdown-text">Functions</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-example-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Example Data</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-example-data">    
+        <li>
+    <a class="dropdown-item" href="./Data/PF_DTM3.tif" rel="" target="">
+ <span class="dropdown-text">DEM</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Data/PF_studyarea.shp" rel="" target="">
+ <span class="dropdown-text">Study Area</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Data/PF_wetlands.shp" rel="" target="">
+ <span class="dropdown-text">Wetlands</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/kaijeffreys/WIPbook" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -119,14 +180,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="./">WIP Tutorial</a> 
-    </div>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -175,18 +231,106 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./build_model.html" class="sidebar-item-text sidebar-link">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./build_model.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Build Model</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tree.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Decision Tree</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./forest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Random Forest</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./knn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">K-Nearest Neighbors</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./run_model.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Running Model</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./test.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Testing model</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./extra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Extraneous Tips</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./train_pts_fun.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">build_train_pts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fun_s1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">surface_met1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fun_s.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">surface_met</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./build_model_fun.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">build_model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./run_model_fun.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">run_model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cv_err_fun.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CV_err</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -194,11 +338,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+    <h2 id="toc-title">On this page</h2>
    
   <ul>
   <li><a href="#parameters" id="toc-parameters" class="nav-link active" data-scroll-target="#parameters">Parameters</a></li>
-  <li><a href="#using-function-example" id="toc-using-function-example" class="nav-link" data-scroll-target="#using-function-example">Using function example</a></li>
+  <li><a href="#using-function-example" id="toc-using-function-example" class="nav-link" data-scroll-target="#using-function-example">Using function example</a>
+  <ul class="collapse">
+  <li><a href="#visuals-of-example" id="toc-visuals-of-example" class="nav-link" data-scroll-target="#visuals-of-example">Visuals of example</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -222,7 +369,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed <a href="">here</a>, produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.</p>
+<p>The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed <a href="https://github.com/TerrainWorks-Seattle/ForestedWetlands">here</a>, produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.</p>
 <p>Running the <code>surface_met1</code> function sets up the bridge between R and the Executable files. There are a few differences between running this function versus the <code>surface_met</code> function. Since the files are run externally, the user needs to type in the file directories rather than the variable in R. Another thing to note is that currently there is not a setup to run TWI with these files, so we are limited to just the other four types of metrics</p>
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
@@ -268,12 +415,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="using-function-example" class="level2">
 <h2 class="anchored" data-anchor-id="using-function-example">Using function example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">surface_met1</span>(<span class="at">len =</span> <span class="dv">100</span>, <span class="at">dem_dir =</span> <span class="st">"../PackForest/PF_DTM3.tif"</span>,</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">surface_met1</span>(<span class="at">len =</span> <span class="dv">100</span>, <span class="at">dem_dir =</span> <span class="st">"Data/PF_DTM3.tif"</span>,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"grad"</span>, <span class="st">"prof"</span>, <span class="st">"plan"</span>),</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">exec_dir =</span> <span class="st">"../ExecutableFiles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The functions creates a <code>.txt</code> file named <code>input_makeGrids</code> (or <code>input_localRelief</code> for DEV) which, as the name suggests, is an input file for the Executable Files. It lists all the important file directories (including the outputs), as well as the length scale that the metrics will be calculated at.</p>
+<section id="visuals-of-example" class="level3">
+<h3 class="anchored" data-anchor-id="visuals-of-example">Visuals of example</h3>
+<p>Here is what a map of gradient looks like at 100 meter length scale, calculated above.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="surface_met1_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>As for the curvatures, the minute differences might be hard to see on a visualization, but rest assured, the assumed minute differences are still important in the models that are calculated later on.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="surface_met1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

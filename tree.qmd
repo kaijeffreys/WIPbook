@@ -1,0 +1,40 @@
+# Decision Tree {.unnumbered}
+
+```{r, echo=FALSE}
+dem <- terra::rast("Data/PF_DTM3.tif")
+multi_pts <- terra::vect("Data/multi_pts.shp")
+simple_pts <- terra::vect("Data/simple_pts.shp")
+elev1 <- list(grad20 = terra::rast("Data/grad20.tif"),
+              prof20 = terra::rast("Data/prof20.tif"),
+              plan20 = terra::rast("Data/plan20.tif"))
+elev2 <- list(grad100 = terra::rast("Data/grad100.tif"),
+              prof100 = terra::rast("Data/prof100.tif"),
+              plan100 = terra::rast("Data/plan100.tif"))
+elev3 <- list(twi10 = terra::rast("Data/twi10.tif"))
+load("Data/fun.RData")
+```
+
+## Description
+
+A decision tree is a method of machine learning that works a lot like a flow chart. Using the features, or input data, the tree then conducts tests on the data. An example of one of these tests, would be if the gradient at 100 meters is greater than 0.5, or whether the planar curvature is greater than 0.05, or if TWI is higher than zero. After a test, then depending on its result, the tree either assigns a class or checks another test. The tree keeps conducting tests until it assigns a class to the observation. A diagram of how this whole system works can be found below 
+
+![](Pics/tree.png)
+
+## Example of use
+
+```{r}
+multi_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+                         train = multi_pts, ref_raster = dem,
+                         class_field_name = "class",
+                         model_type = "tree")
+
+simple_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+                         train = simple_pts, ref_raster = dem,
+                         model_type = "tree")
+```
+
+The returned object is a `randomForest` object (more on why on the next page), which contains a large amount of information. If run, as is done below, it returns the estimated error as well as a confusion matrix on the training data
+
+```{r}
+multi_mod
+```

@@ -2,4 +2,13 @@
 title: "Functions"
 ---
 
-This section contains all of the functions mentioned throughout this whole book.
+This section contains the code for all of the functions mentioned throughout this whole book. As a review, a list of all of these functions is below:
+
+-   build_train_pts
+-   surface_met1
+-   surface_met2
+-   build_model
+-   run_model
+-   CV_err
+
+To use these functions are your device, either click the *Functions* link under the **Downloads** tab in the right corner, which downloads an `.RData` file containing them and can be loaded using the `load` function, or copy/paste each of these sectiona into your own R session

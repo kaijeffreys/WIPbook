@@ -1,0 +1,41 @@
+# Random Forest {.unnumbered}
+
+```{r, echo=FALSE}
+dem <- terra::rast("Data/PF_DTM3.tif")
+multi_pts <- terra::vect("Data/multi_pts.shp")
+simple_pts <- terra::vect("Data/simple_pts.shp")
+elev1 <- list(grad20 = terra::rast("Data/grad20.tif"),
+              prof20 = terra::rast("Data/prof20.tif"),
+              plan20 = terra::rast("Data/plan20.tif"))
+elev2 <- list(grad100 = terra::rast("Data/grad100.tif"),
+              prof100 = terra::rast("Data/prof100.tif"),
+              plan100 = terra::rast("Data/plan100.tif"))
+elev3 <- list(twi10 = terra::rast("Data/twi10.tif"))
+load("Data/fun.RData")
+```
+
+Our next model is a random forest, which is set as the default model for the `build_model` function.
+
+## Description
+
+A random forest is a model that generates a large number of decision trees (hence the name). To calculate probabilities, the model checks the decisions and then calculates the proportion of the trees that chose each class. Those proportions are the estimated probabilities. To make an overall prediction, the model just takes the class with the highest amount trees that decided in its favor.
+
+![](Pics/forest.png)
+
+## Examples of Use
+
+```{r}
+multi_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+                         train = multi_pts, ref_raster = dem)
+
+simple_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+                         train = simple_pts, ref_raster = dem)
+```
+
+Since they are very similar algorithms, the returned output for random forest models is the same as with trees, as we can see from the printed output below: 
+
+```{r}
+multi_mod
+```
+
+

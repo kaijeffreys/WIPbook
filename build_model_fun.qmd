@@ -46,8 +46,10 @@ build_model <- function(in_rasts, poly_inputs = list(), train, ref_raster,
     in_rasts[[i]] <- terra::crop(in_rasts[[i]], ref_raster)
   }
   
+  
   # Set up training data
   print("Setting up training data")
+  train <- terra::project(train, ref_raster)
   df_train <- data.frame(class = factor(as.vector(unlist(train[[class_field_name]]))))
   for(i in 1:length(in_rasts)) {
     vals <- terra::extract(in_rasts[[i]], train, ID = F)

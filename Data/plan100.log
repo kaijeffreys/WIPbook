@@ -1,0 +1,35 @@
+  MakeGrids log file
+    Version 1.0.11
+    Compiled November 24, 2023
+    Started February 13, 2024 at 2:06 PM
+  ==============================================================
+  Input file: C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\input_makeGrids.txt
+    copied below
+  --------------------------------------------------------------
+  # Input file for makeGrids
+ 
+  DEM: C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\Data\PF_DTM3.tif
+  SCRATCH DIRECTORY: C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\
+  LENGTH SCALE: 100
+  GRID: GRADIENT, OUTPUT FILE = C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\grad100.flt
+  GRID: PLAN CURVATURE, OUTPUT FILE = C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\plan100
+  GRID: PROFILE CURVATURE, OUTPUT FILE = C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\prof100
+  ====================End Input File==========================
+ 
+  Program runtime output follows
+ 
+ 
+  Grids to construct:
+  SLOPE
+  PLANCURV
+  PROFCURV
+ 
+  Reading DEM
+  Calculating surface metrics
+  Scale length: 100.0000
+  Created PROFILE CURVATURE file C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\prof100
+  Created PLAN CURVATURE file C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\plan100
+  Created GRADIENT file C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\grad100
+  MakeGrids finished at February 13, 2024 at 2:06:10:281 PM
+  Elapsed CPU (seconds): 2.703125
+  Created log file C:\Users\kaije\OneDrive\Projects\Klamath\WIPbook\grad100.log

@@ -8,9 +8,9 @@ There are five types of surface metrics that we are currently able to calculate 
 
 -   **Gradient**: essentially just the rate of change in elevation
 
--   **Profile curvature**: the curvature in the direction of the maximum slope![](Data/profcurv.png){width="80%"}
+-   **Profile curvature**: the curvature in the direction of the maximum slope![](Pics/profcurv.png){width="80%"}
 
--   **Planar curvature**: the curvature that is perpendicular to the direction of the maximum slope (sideways curvature)![](Data/plancurv.png){width="80%"}
+-   **Planar curvature**: the curvature that is perpendicular to the direction of the maximum slope (sideways curvature)![](Pics/plancurv.png){width="80%"}
 
 -   **Local relief (DEV)**: is the representation of where a spot is in elevation in comparison to its surroundings
 

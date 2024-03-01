@@ -23,9 +23,9 @@ install.packages("nnet")
 5.  (Optional) Load in the data that will be used in the tool. This step is optional because all of the functions used in the WIP tool can receive file names as inputs. However, typing out file names over and over again can be a drag, so loading them in once can be the superior option.
 
 ```{r}
-dem <- terra::rast("../PackForest/PF_DTM3.tif")
-region <- terra::vect("../PackForest/PF_studyarea.shp")
-wetlands <- terra::vect("../PF_wetlands.shp")
+dem <- terra::rast("Data/PF_DTM3.tif")
+region <- terra::vect("Data/PF_studyarea.shp")
+wetlands <- terra::vect("Data/PF_wetlands.shp")
 ```
 
-The data that we loaded above to use for the document is from an area in Eatonville, WA (near Mount Rainier) called Pack Forest . It is a small land mass (making it ideal for an example), with four classified wetlands: Riverine, Freshwater Emergent Wetland, Freshwater Forested/Shrub Wetland, and Freshwater Pond. The thing variables that were just loaded are the Digital Elevation Model (DEM), a polygon file describing a area, and a polygon file describing wetlands within that area, respectively. 
+The data that we loaded above to use for the book is from an area in Eatonville, WA (near Mount Rainier) called Pack Forest. It is a small land mass (making it ideal for an example), with four classified wetlands: Riverine, Freshwater Emergent Wetland, Freshwater Forested/Shrub Wetland, and Freshwater Pond. The three variables that were just loaded are the Digital Elevation Model (DEM), a polygon file describing a area, and a polygon file describing wetlands within that area, respectively.

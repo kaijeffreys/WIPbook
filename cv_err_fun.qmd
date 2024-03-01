@@ -1,0 +1,96 @@
+# CV_err {.unnumbered}
+
+```{r}
+CV_err <- function(in_rasts, poly_inputs = list(), ref_raster,
+                   model_type = "forest", model_params = list(ntree = 200), 
+                   train, kfold= 5, class_field_name = "class") {
+  
+  # Checking if inputs are file names, then load them in
+  if(is.character(in_rasts[1])) {
+    temp_rast <- rep(list(), length(in_rasts))
+    for(i in 1:length(in_rasts)) {
+      temp_rast[[i]] <- terra::rast(in_rasts[i])
+    }
+    names(temp_rast) <- in_rasts
+    in_rasts <- temp_rast
+  }
+
+  if(length(poly_inputs) > 0) {
+    if(is.character(poly_inputs[[1]])) {
+      temp_poly <- rep(list(), length(poly_inputs))
+      for(i in 1:length(poly_inputs)) {
+        if(!file.exists(poly_inputs[[i]])) {
+          stop(paste0("Cannot find poly input file:", poly_inputs[i]))
+        }
+        temp_poly[[i]] <- terra::vect(poly_inputs[i]) 
+      }
+      names(temp_poly) <- poly_inputs
+      poly_inputs <- temp_poly
+    }
+  }
+  
+  # Convert the polygons into rasters
+  if(length(poly_inputs) > 0) {
+    for(i in 1:length(poly_inputs)) {
+      vr_name <- names(poly_inputs)[i]
+      temp_rast <- terra::rasterize(poly_inputs[i], ref_raster, field = vr_name)
+      in_rasts <- c(in_rasts, temp_rast)
+    }
+  }
+  
+  # Ensure that all inputs are covering the same area
+  for(i in 1:length(in_rasts)) {
+    in_rasts[[i]] <- terra::project(in_rasts[[i]], ref_raster)
+    in_rasts[[i]] <- terra::crop(in_rasts[[i]], ref_raster)
+  }
+  
+  # Set up training data
+  train <- terra::project(train, ref_raster)
+  df_train <- data.frame(class = factor(as.vector(unlist(train[[class_field_name]]))))
+  for(i in 1:length(in_rasts)) {
+    vals <- terra::extract(in_rasts[[i]], train, ID = F)
+    df_train <- cbind(df_train, vals)
+  }
+  df_train <- na.omit(df_train)
+  colnames(df_train) <- c("class", names(in_rasts))
+  
+  k <- kfold
+  test_err <- c()
+  index <- sample(k, nrow(df_train), replace = T)
+  
+  for(i in 1:k) {
+    train_df <- df_train[index != i,]
+    test_df <- df_train[index == i,]
+    y_test <- test_df$class
+    
+    if(model_type == "forest"){
+      mod <- randomForest::randomForest(class ~ ., data = train_df, 
+                                        ntree = model_params$ntree)
+    } else if (model_type == "tree") {
+      mod <- randomForest::randomForest(class ~ ., data = train_df, ntree = 1)
+    } else if(model_type == "glm") {
+      if(length(levels(df_train$class)) > 2) {
+        mod <- nnet::multinom(class ~ ., data = train_df)
+      } else {
+        mod <- glm(class ~ ., data = train_df, family = "binomial")
+      }
+    } else if(model_type == "knn") {
+      mod <- caret::knn3(formula = class ~ ., data = train_df,
+                         k = model_params$k)
+    } else {
+      stop("Incorrect model type")
+    }
+    
+    if(model_type == "glm") {
+      pred <- predict(mod, newdata = test_df, type = "response")
+    } else {
+      pred <- predict(mod, newdata = test_df)
+    }
+    test_err[i] <- mean(pred != y_test)
+  }
+  mean_err <- mean(test_err)
+  ci_err <- round(100 * (mean_err + c(-1, 1)*qnorm(0.975)*sd(test_err)/k), 1)
+  print(paste0("Test Error Estimate: ", round(mean_err * 100, 1), "%"))
+  print(paste0("95% Confidence Interval: [", ci_err[1], ", ", ci_err[2], "]"))
+}
+```

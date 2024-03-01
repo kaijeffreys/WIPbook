@@ -1,47 +1,23 @@
 # Build Model {.unnumbered}
 
-```{r, echo=FALSE}
-dem <- terra::rast("Data/PF_DTM3.tif")
-multi_pts <- terra::vect("Data/multi_pts.shp")
-simple_pts <- terra::vect("Data/multi_pts.shp")
-elev1 <- list(grad20 = terra::rast("Data/grad20.tif"),
-              prof20 = terra::rast("Data/prof20.tif"),
-              plan20 = terra::rast("Data/plan20.tif"))
-elev2 <- list(grad100 = terra::rast("Data/grad100.tif"),
-              prof100 = terra::rast("Data/prof100.tif"),
-              plan100 = terra::rast("Data/plan100.tif"))
-elev3 <- list(twi10 = terra::rast("Data/twi10.tif"))
-load("fun.RData")
-```
-
 Now that we have both the surface metrics and training points, now it is finally time to start calculating wetland probabilities. The first step is building, or training, the model. This allows the model to figure out how to calculate probabilities and make predictions.
+
+See `build_model` section for the function
 
 ## Model options
 
-The model options are decision tree, random forest, logistic regression, and k-nearest neighbors. These are all types of classification algorithms that you can read more into [here](). The default setting is to run random forest with `n=200` trees. To change this, the user would just need to type `model_type =` and choose their selection of `c("forest", "tree", "glm", "knn")`.
+The model options are decision tree, random forest, logistic regression, and k-nearest neighbors. More on these types of models in the coming pages The default setting is to run random forest with `n=200` trees. To change this, the user would just need to type `model_type =` and choose their selection of `c("forest", "tree", "glm", "knn")`.
 
-Also, depending on the model choice, you might also have to add an extra input, `model_params`. If the choice is `knn`, then you would have to add in the number of neighbors. For example, if you want to use ten neighbors, just type in `model_params = list(k = 10)`. Iff you want to use a different number of tress in the random forest than `n=200`, just type in `model_params = list(ntree = )` , with the selected choice of trees after the equal sign.
-
+Also, depending on the model choice, you might also have to add an extra input, `model_params`. If the choice is `knn`, then you would have to add in the number of neighbors. For example, if you want to use ten neighbors, just type in `model_params = list(k = 10)`. If you want to use a different number of tress in the random forest than `n=200`, just type in `model_params = list(ntree = )` , with the selected choice of trees after the equal sign.
 
 ## Parameters
 
-| Input              | Description                                                                                                                                                                |
-|--------------|----------------------------------------------------------|
-| `in_rasts`         | List input that contains all the rasters that are chosen to be included in the model                                                                                       |
-| `poly_inputs`      | List input that contains the polygons that are chosen to be included in the model, if any                                                                                  |
-| `train`            | Spatial vector input of the training points                                                                                                                                |
-| `ref_raster`       | Spatial raster input of the reference raster, which is used to align all of the other inputs. The DEM is usually a good choice here                                        |
-| `model_type`       | String input indicating type of machine learning model. Options include "forest", "tree", "glm", and "knn"                                                                 |
-| `model_params`     | List input representing necessary parameters to the model. Depending on the model, it may require an extra input, such as the number of trees or number of neighbors.      |
-| `class_field_name` | String input indicating the field where the wetland classification is. If calculated training points using the `build_train_pts` function above, this input may be skipped |
-
-## Examples
-
-```{r}
-multi_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
-                         train = multi_pts, ref_raster = dem,
-                         class_field_name = "class")
-
-simple_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
-                         train = simple_pts, ref_raster = dem)
-```
+| Input              | Description                                                                                                                                                                                                                            |
+|----------------------|--------------------------------------------------|
+| `in_rasts`         | List input that contains all the rasters that are chosen to be included in the model                                                                                                                                                   |
+| `poly_inputs`      | List input that contains the polygons that are chosen to be included in the model, if any                                                                                                                                              |
+| `train`            | Spatial vector input of the training points                                                                                                                                                                                            |
+| `ref_raster`       | Spatial raster input of the reference raster, which is used to align all of the other inputs. The DEM is usually a good choice here                                                                                                    |
+| `model_type`       | String input indicating type of machine learning model. Options include "forest", "tree", "glm", and "knn"                                                                                                                             |
+| `model_params`     | List input representing necessary parameters to the model. Depending on the model, it may require an extra input, such as the number of trees or number of neighbors.                                                                  |
+| `class_field_name` | String input indicating the field where the wetland classification is. If calculated training points using the `build_train_pts` function above, this input may be skipped. However, very important if training points came externally |
