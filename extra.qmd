@@ -4,32 +4,30 @@
 dem <- terra::rast("Data/PF_DTM3.tif")
 multi_pts <- terra::vect("Data/multi_pts.shp")
 simple_pts <- terra::vect("Data/simple_pts.shp")
-elev1 <- list(grad20 = terra::rast("Data/grad20.tif"),
-              prof20 = terra::rast("Data/prof20.tif"),
-              plan20 = terra::rast("Data/plan20.tif"))
-elev2 <- list(grad100 = terra::rast("Data/grad100.tif"),
-              prof100 = terra::rast("Data/prof100.tif"),
-              plan100 = terra::rast("Data/plan100.tif"))
-elev3 <- list(twi10 = terra::rast("Data/twi10.tif"))
+in_rasts <- list(grad20 = terra::rast("Data/grad20.tif"),
+                 prof20 = terra::rast("Data/prof20.tif"),
+                 plan20 = terra::rast("Data/plan20.tif"),
+                 grad100 = terra::rast("Data/grad100.tif"),
+                 prof100 = terra::rast("Data/prof100.tif"),
+                 plan100 = terra::rast("Data/plan100.tif"),
+                 dev100 = terra::rast("Data/dev100.tif"),
+                 twi10 = terra::rast("Data/twi10.tif"))
 load("Data/fun.RData")
-multi_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+multi_mod <- build_model(in_rasts = in_rasts,
                          train = multi_pts, ref_raster = dem,
                          class_field_name = "class")
 
-simple_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+simple_mod <- build_model(in_rasts = in_rasts,
                          train = simple_pts, ref_raster = dem)
 
-prob_multi <- run_model(multi_mod, 
-                        in_rasts = c(elev1, elev2, elev3),
+prob_multi <- run_model(multi_mod, in_rasts = in_rasts,
                         ref_raster = dem)
 
-prob_simple <- run_model(simple_mod, 
-                        in_rasts = c(elev1, elev2, elev3),
+prob_simple <- run_model(simple_mod, in_rasts = in_rasts,
                         ref_raster = dem)
 
 class_multi <- run_model(multi_mod, class_rast = TRUE,
-                        in_rasts = c(elev1, elev2, elev3),
-                        ref_raster = dem)
+                        in_rasts = in_rasts, ref_raster = dem)
 ```
 
 ## Visualizing model
@@ -127,5 +125,7 @@ As always in dealing with any sort of computer processing, it is just a matter o
     -   Incorrect input in `wet_types`, meaning that the function is searching for wetlands that are actually not there
 
     -   Incorrect input in `wet_field`, which means that the function can't find where the types of wetlands are listed. This will happen when the wetlands are from a different database than NWI. To figure out what the field name is, try using the `names()` function and then see which field is most likely to contain the wetland types, then type that into `wet_field`
+
+-   `NA/NaN/Inf in foreign function call` is an error that may come when running `build_model` or `run_model`. However, the stem of this error likely comes from the calculation of Topographical Wetness Index (TWI) values, which may produce infinite values. If this happens, the best way past it is simply to not include TWI in the creation of the model.
 
 However, if a different error shows up, keep in mind that usually the best way to solve an error is to copy the error message R puts up, and then paste it into a search engine. It might seem like a cheat and a bit lazy, but it is a very successful debugging tactic.

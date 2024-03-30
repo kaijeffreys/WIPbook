@@ -16,6 +16,12 @@ surface_met <- function(DEM, len, export = FALSE,
     k <- k + 1
   }
   
+  j <- k/2 + 0.5
+  
+  # Sets up the moving window which is used to calculate the metrics
+  w_mat <- matrix(nrow = k, ncol = k)
+  w_mat[c(rep(1,3), rep(j,3), rep(k,3)), rep(c(1,j,k), 3)] <- 1
+  
   # Initialize the inputs for the model
   in_rast <- list()
   
@@ -88,18 +94,17 @@ surface_met <- function(DEM, len, export = FALSE,
   }
   
   if("dev" %in% elev_dev) {
-    dev <- (DEM - focal(DEM, w = k, fun = "mean", na.rm = T, na.policy = "omit")) / focal(DEM, w = k, fun = "sd", na.rm = T, na.policy = "omit") 
-    in_rast <- c(in_rast, rast_dev)
+    dev <- (DEM - terra::focal(DEM, w = w_mat, fun = "mean", na.rm = T, na.policy = "omit")) / terra::focal(DEM, w = w_mat, fun = "sd", na.rm = T, na.policy = "omit") 
+    in_rast <- c(in_rast, dev)
     
     names(in_rast)[length(in_rast)] <- paste0("dev", len)
   }
   
   if("twi" %in% elev_dev) {
     topidx <- topmodel::topidx(terra::as.matrix(DEM), res = terra::res(DEM)[1])
-    a <- terra::setValues(DEM, topidx$area)
-    twi <- a / tan(terra::terrain(DEM, unit = "radians"))
+    twi <- terra::setValues(DEM, topidx$atb)
     terra::values(twi) <- ifelse(terra::values(twi) < 0, 0, terra::values(twi))
-    twi <- terra::focal(twi, w = k, mean, na.rm = T, na.policy = "omit")
+    twi <- terra::focal(twi, w = w_mat, mean, na.rm = T, na.policy = "all")
     
     in_rast <- c(in_rast, twi)
     

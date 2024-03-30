@@ -13,7 +13,7 @@ This step can be done either before or after calculating surface metrics, but ne
 ## Parameters
 
 | Inputs          | Description                                                                                                                                                                        |
-|----------------|--------------------------------------------------------|
+|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `region_poly`   | Polygon (shape file) input that contains the shape of the whole area of interest                                                                                                   |
 | `wet_poly`      | Polygon input that contains areas where the (known) wetlands are located                                                                                                           |
 | `multi_class`   | Binary variable indicating whether or not to return points from each of the wetland types or just have binary wetland/non-wetland points                                           |
@@ -21,6 +21,14 @@ This step can be done either before or after calculating surface metrics, but ne
 | `wet_field`     | String input indicating what the field name of the type of wetland in `wet_poly` is. The default is "WETLAND_TY", given that is the name NWI uses                                  |
 | `sample_points` | Vector indicating number of points to sample that are wet and non-wetland. First element in vector is the number of wetland points and second element is the number of non-wetland |
 | `export`        | Binary parameter that determines whether or not the function exports the output to a file                                                                                          |
+
+If you have trouble obtaining a ideal region shape file, but have a DEM (or some other raster file of the area of interest), one line of code is able to solve this as follows:
+
+```{r, eval=FALSE}
+region <- terra::as.polygons(dem > -Inf)
+```
+
+What this code does is check which cells have actual values (or not NAs), and then builds one polygon around all those values, creating an overall region shape.
 
 ## Running training points
 
@@ -66,9 +74,11 @@ terra::add_legend("bottomleft", legend = c("UPL", "WET"),
 
 If you run the function without specifying the `wet_type`, it might still run (especially if the data was obtained from NWI), but it will also likely give warnings, for some wetland types that are not present in the file, as shown below.
 
-```{r, warning=FALSE}
+```{r}
 build_train_pts(region, wetlands)
 ```
+
+Another possible problem that may come when running `build_train_pts`, is that the function may end up generating a different number of points than desired. This could happen when generating binary points. The number will likely only be off by a few points. In addition, there will be a printed warning describing how many wetland points were generated
 
 ## External Training Points
 

@@ -13,7 +13,7 @@ Also, depending on the model choice, you might also have to add an extra input, 
 ## Parameters
 
 | Input              | Description                                                                                                                                                                                                                            |
-|----------------------|--------------------------------------------------|
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `in_rasts`         | List input that contains all the rasters that are chosen to be included in the model                                                                                                                                                   |
 | `poly_inputs`      | List input that contains the polygons that are chosen to be included in the model, if any                                                                                                                                              |
 | `train`            | Spatial vector input of the training points                                                                                                                                                                                            |

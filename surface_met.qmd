@@ -12,7 +12,7 @@ This function can calculate any and all five of the types of metrics described a
 ## Parameters
 
 | Inputs     | Description                                                                                                         |
-|------------|---------------------------------------------------------------------------------------------------------------------|
+|-------------|-----------------------------------------------------------|
 | `DEM`      | As the name suggests, this input is the DEM/DTM                                                                     |
 | `len`      | Number input represents the length at which the metric is calculated                                                |
 | `elev_dev` | Vector input of selection of metrics. The choices are "grad", "prof", "plan", "dev", "twi"                          |
@@ -21,9 +21,10 @@ This function can calculate any and all five of the types of metrics described a
 ## Using the function
 
 ```{r, warning=FALSE}
-elev1 <- surface_met(dem, len = 20, elev_dev = c("grad", "prof", "plan"))
-elev2 <- surface_met(dem, len = 100, elev_dev = c("grad", "prof", "plan"))
-elev3 <- surface_met(dem, len = 10, elev_dev = c("twi"))
+elev1 <- surface_met(dem, len = 20,
+                     elev_dev = c("grad", "prof", "plan", "twi"))
+elev2 <- surface_met(dem, len = 100,
+                     elev_dev = c("grad", "prof", "plan", "dev"))
 ```
 
 A progress bar is printed below a few of the functions, in case you were wondering what those odd lines were. This is added so that the user can have some semblance of how much is left to run. Most of the functions within the entirety of the tool do something similar, as they will often take some time to run.
@@ -47,7 +48,32 @@ This is done to ensure that data is not eliminated, since the other option would
 One last visualization that you might find interesting is how the TWI looks, so this is shown below.
 
 ```{r, echo=FALSE}
-col_fun <- colorRampPalette(c("gray95", "darkblue"))
-terra::plot(elev3$twi10, main = "Topographical Wetness Index",
-            col = col_fun(length(terra::values(elev3$twi10))))
+col_fun <- colorRampPalette(c("gray99", "blue"))
+terra::plot(elev1$twi20, main = "Topographical Wetness Index",
+            col = col_fun(length(terra::values(elev1$twi20))))
 ```
+
+## Preparing for next step
+
+As with `surface_met1`, it is good practice to load up all the raster metrics in one place, since it will make things much easier later on.
+
+```{r}
+in_rasts <- list(grad20 = elev1$grad20,
+                 plan20 = elev1$plan20,
+                 prof20 = elev1$prof20,
+                 grad100 = elev2$grad100,
+                 plan100 = elev2$plan100,
+                 prof100 = elev2$prof100,
+                 dev100 = elev2$dev100,
+                 twi20 = elev1$twi20)
+```
+
+If all of the needed metrics were generated just from `surface_met`, then we can just combine them with a vector, as seen below.
+
+```{r}
+in_rasts <- c(elev1, elev2)
+```
+
+Doing this keeps them in a list format, with the key names still attached to each type of metric.
+
+In addition, if you want to just keep one scale of metrics (like the grad, prof, plan, etc. of just 100m) in the later models, then there is no combination of elements needed! Just keep the returned object from the `surface_met` function

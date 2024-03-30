@@ -37,14 +37,12 @@ book:
     background: info
     foreground: secondary
     right:
-      - text: "Downloads"
-        menu: 
-        - text: "Manual"
-          href: pdf_manual.pdf
-        - text: "WIP Template"
-          href: template.rmd
-        - text: "Functions"
-          href: Data/fun.RData
+      - text: "WIP Template"
+        href: template.rmd
+      - text: "Functions"
+        href: Data/fun.RData
+      - text: "Executables"
+        href: ExecutableFiles
       - text: "Example Data"
         menu:
         - text: "DEM"
@@ -54,7 +52,7 @@ book:
         - text: "Wetlands"
           href: Data/PF_wetlands.shp
       - icon: github
-        url: https://github.com/kaijeffreys/WIPbook
+        url: https://github.com/kaijeffreys/WIP
     search: true
     pinned: true
 

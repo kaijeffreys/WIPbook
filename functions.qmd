@@ -6,7 +6,7 @@ This section contains the code for all of the functions mentioned throughout thi
 
 -   build_train_pts
 -   surface_met1
--   surface_met2
+-   surface_met
 -   build_model
 -   run_model
 -   CV_err

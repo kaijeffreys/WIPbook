@@ -116,25 +116,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-downloads" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Downloads</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
-        <li>
-    <a class="dropdown-item" href="./pdf_manual.pdf" rel="" target="">
- <span class="dropdown-text">Manual</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./template.rmd" rel="" target="">
+ <span class="menu-text">WIP Template</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./template.rmd" rel="" target="">
- <span class="dropdown-text">WIP Template</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./Data/fun.RData" rel="" target="">
+ <span class="menu-text">Functions</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./Data/fun.RData" rel="" target="">
- <span class="dropdown-text">Functions</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./ExecutableFiles" rel="" target="">
+ <span class="menu-text">Executables</span></a>
   </li>  
-    </ul>
-  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-example-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Example Data</span>
@@ -155,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/kaijeffreys/WIPbook" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/kaijeffreys/WIP" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -373,8 +366,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The inputs for this function are almost the exactly the same as the <code>build_model</code> function, with one addition, <code>kfold</code>, the number of folds used in cross-validation.</p>
 <table class="table">
 <colgroup>
-<col style="width: 23%">
-<col style="width: 76%">
+<col style="width: 19%">
+<col style="width: 80%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -422,17 +415,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="examples-of-use">Examples of use</h2>
 <p>The function has the same inputs as the <code>build_model</code> functions. However, there is one more feature to customize, which is <code>k_folds</code>, or the number of times the cross validation is run. The default for the function is <code>kfolds = 5</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CV_err</span>(<span class="at">in_rasts =</span> <span class="fu">c</span>(elev1, elev2, elev3), <span class="at">train =</span> multi_pts,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">ref_raster =</span> dem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CV_err</span>(<span class="at">in_rasts =</span> in_rasts, <span class="at">train =</span> multi_pts, <span class="at">ref_raster =</span> dem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Test Error Estimate: 33.3%"
-[1] "95% Confidence Interval: [32.3, 34.3]"</code></pre>
+<pre><code>[1] "Test Error Estimate: 30.6%"
+[1] "95% Confidence Interval: [29.1, 32.1]"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CV_err</span>(<span class="at">in_rasts =</span> <span class="fu">c</span>(elev1, elev2, elev3), <span class="at">train =</span> simple_pts,</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">ref_raster =</span> dem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CV_err</span>(<span class="at">in_rasts =</span> in_rasts, <span class="at">train =</span> simple_pts, <span class="at">ref_raster =</span> dem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Test Error Estimate: 22.2%"
-[1] "95% Confidence Interval: [19.1, 25.4]"</code></pre>
+<pre><code>[1] "Test Error Estimate: 21.7%"
+[1] "95% Confidence Interval: [17.6, 25.9]"</code></pre>
 </div>
 </div>
 <p>As we can tell above, the binary model is doing a much better job of prediction than the multi-class model</p>

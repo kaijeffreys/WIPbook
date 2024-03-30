@@ -4,20 +4,25 @@
 dem <- terra::rast("Data/PF_DTM3.tif")
 multi_pts <- terra::vect("Data/multi_pts.shp")
 simple_pts <- terra::vect("Data/simple_pts.shp")
-elev1 <- list(grad20 = terra::rast("Data/grad20.tif"),
-              prof20 = terra::rast("Data/prof20.tif"),
-              plan20 = terra::rast("Data/plan20.tif"))
-elev2 <- list(grad100 = terra::rast("Data/grad100.tif"),
-              prof100 = terra::rast("Data/prof100.tif"),
-              plan100 = terra::rast("Data/plan100.tif"))
-elev3 <- list(twi10 = terra::rast("Data/twi10.tif"))
+grad20 <- terra::rast("Data/grad20.tif")
+prof20 <- terra::rast("Data/prof20.tif")
+plan20 <- terra::rast("Data/plan20.tif")
+grad100 <- terra::rast("Data/grad100.tif")
+prof100 <- terra::rast("Data/prof100.tif")
+plan100 <- terra::rast("Data/plan100.tif")
+dev100 <- terra::rast("Data/dev100.tif")
+twi10 <- terra::rast("Data/twi10.tif")
 load("Data/fun.RData")
-multi_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
+in_rasts <- list(grad20 = grad20, prof20 = prof20,
+                 plan20 = plan20, grad100 = grad100,
+                 prof100 = prof100, plan100 = plan100,
+                 dev100 = dev100, twi10 = twi10)
+multi_mod <- build_model(in_rasts = in_rasts,
                          train = multi_pts, ref_raster = dem,
                          class_field_name = "class")
 
-simple_mod <- build_model(in_rasts = c(elev1, elev2, elev3),
-                         train = simple_pts, ref_raster = dem)
+simple_mod <- build_model(in_rasts = in_rasts,
+                          train = simple_pts, ref_raster = dem)
 ```
 
 We have surface metrics and have built a model. Now it is time to run the model, which means it is finally time to make predictions and/or obtain probabilities. To accomplish this, we use the `run_model` function. The function either returns a classification raster or a set of probability rasters, depending on your choice.
@@ -25,7 +30,7 @@ We have surface metrics and have built a model. Now it is time to run the model,
 ## Parameters
 
 | Inputs        | Description                                                                                                                         |
-|-------------------|-----------------------------------------------------|
+|--------------------|----------------------------------------------------|
 | `in_rasts`    | List input that contains all the rasters that are chosen to be included in the model                                                |
 | `poly_inputs` | List input that contains the polygons that are chosen to be included in the model, if any                                           |
 | `ref_raster`  | Spatial raster input of the reference raster, which is used to align all of the other inputs. The DEM is usually a good choice here |
@@ -36,17 +41,15 @@ We have surface metrics and have built a model. Now it is time to run the model,
 ## Executing the function
 
 ```{r}
-prob_multi <- run_model(multi_mod, 
-                        in_rasts = c(elev1, elev2, elev3),
+prob_multi <- run_model(multi_mod, in_rasts = in_rasts,
                         ref_raster = dem)
 
-prob_simple <- run_model(simple_mod, 
-                        in_rasts = c(elev1, elev2, elev3),
+prob_simple <- run_model(simple_mod, in_rasts = in_rasts,
                         ref_raster = dem)
 
 ```
 
-The function outputs a SpatRaster object has probabilisitic (or categorical) values and has the same extent (meaning) as the reference raster, as seen below.\
+The function outputs a SpatRaster object has probabilistic (or categorical) values and has the same extent (meaning) as the reference raster, as seen below.\
 
 ```{r}
 prob_simple
@@ -66,8 +69,7 @@ Instead of returning probabilities, the `run_model` function also has an option 
 
 ```{r}
 class_multi <- run_model(multi_mod, class_rast = TRUE,
-                        in_rasts = c(elev1, elev2, elev3),
-                        ref_raster = dem)
+                        in_rasts = in_rasts, ref_raster = dem)
 class_multi
 ```
 

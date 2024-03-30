@@ -116,25 +116,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-downloads" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Downloads</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
-        <li>
-    <a class="dropdown-item" href="./pdf_manual.pdf" rel="" target="">
- <span class="dropdown-text">Manual</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./template.rmd" rel="" target="">
+ <span class="menu-text">WIP Template</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./template.rmd" rel="" target="">
- <span class="dropdown-text">WIP Template</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./Data/fun.RData" rel="" target="">
+ <span class="menu-text">Functions</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./Data/fun.RData" rel="" target="">
- <span class="dropdown-text">Functions</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./ExecutableFiles" rel="" target="">
+ <span class="menu-text">Executables</span></a>
   </li>  
-    </ul>
-  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-example-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Example Data</span>
@@ -155,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/kaijeffreys/WIPbook" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/kaijeffreys/WIP" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -374,7 +367,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="example-of-use" class="level2">
 <h2 class="anchored" data-anchor-id="example-of-use">Example of use</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>multi_mod <span class="ot">&lt;-</span> <span class="fu">build_model</span>(<span class="at">in_rasts =</span> <span class="fu">c</span>(elev1, elev2, elev3),</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>multi_mod <span class="ot">&lt;-</span> <span class="fu">build_model</span>(<span class="at">in_rasts =</span> in_rasts,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">train =</span> multi_pts, <span class="at">ref_raster =</span> dem,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">class_field_name =</span> <span class="st">"class"</span>,</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model_type =</span> <span class="st">"tree"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -384,9 +377,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [1] "Building model"
 [1] "Done!"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>simple_mod <span class="ot">&lt;-</span> <span class="fu">build_model</span>(<span class="at">in_rasts =</span> <span class="fu">c</span>(elev1, elev2, elev3),</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">train =</span> simple_pts, <span class="at">ref_raster =</span> dem,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">model_type =</span> <span class="st">"tree"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>simple_mod <span class="ot">&lt;-</span> <span class="fu">build_model</span>(<span class="at">in_rasts =</span> in_rasts, <span class="at">train =</span> simple_pts,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">ref_raster =</span> dem, <span class="at">model_type =</span> <span class="st">"tree"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Formatting inputs"
 [1] "Setting up training data"
@@ -405,26 +397,26 @@ Call:
                      Number of trees: 1
 No. of variables tried at each split: 2
 
-        OOB estimate of  error rate: 44.09%
+        OOB estimate of  error rate: 37.63%
 Confusion matrix:
                                   Freshwater Emergent Wetland
-Freshwater Emergent Wetland                                 1
+Freshwater Emergent Wetland                                 0
 Freshwater Forested/Shrub Wetland                           0
-Freshwater Pond                                             1
+Freshwater Pond                                             0
 Riverine                                                    0
-UPL                                                         4
+UPL                                                         2
                                   Freshwater Forested/Shrub Wetland
-Freshwater Emergent Wetland                                       0
-Freshwater Forested/Shrub Wetland                                 0
+Freshwater Emergent Wetland                                       1
+Freshwater Forested/Shrub Wetland                                 3
 Freshwater Pond                                                   0
-Riverine                                                          1
-UPL                                                               5
+Riverine                                                          2
+UPL                                                               4
                                   Freshwater Pond Riverine UPL class.error
-Freshwater Emergent Wetland                    10        0   1   0.9166667
-Freshwater Forested/Shrub Wetland               3        0   3   1.0000000
-Freshwater Pond                                 2        0   0   0.3333333
-Riverine                                        3        2   3   0.7777778
-UPL                                             6        1  47   0.2539683</code></pre>
+Freshwater Emergent Wetland                     2        3   6   1.0000000
+Freshwater Forested/Shrub Wetland               2        0   1   0.5000000
+Freshwater Pond                                 1        0   2   0.6666667
+Riverine                                        1        2   4   0.7777778
+UPL                                             1        4  52   0.1746032</code></pre>
 </div>
 </div>
 

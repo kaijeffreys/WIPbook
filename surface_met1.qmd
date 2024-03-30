@@ -1,13 +1,13 @@
 # Using Executable files {.unnumbered}
 
-The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed [here](https://github.com/TerrainWorks-Seattle/ForestedWetlands), produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.
+The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed by clicking the *Executables* tab in the right corner, produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.
 
 Running the `surface_met1` function sets up the bridge between R and the Executable files. There are a few differences between running this function versus the `surface_met` function. Since the files are run externally, the user needs to type in the file directories rather than the variable in R. Another thing to note is that currently there is not a setup to run TWI with these files, so we are limited to just the other four types of metrics
 
 ## Parameters
 
 | Inputs      | Description                                                                                     |
-|--------------|----------------------------------------------------------|
+|-----------------|-------------------------------------------------------|
 | `len`       | The length that the metrics are calculated at                                                   |
 | `metrics`   | Vector indicating which metrics to calculate. Options include "grad", "prof", "plan", and "dev" |
 | `dem_dir`   | String (text) input that indicates the file directory of the file that contains the DEM         |
@@ -41,3 +41,14 @@ As for the curvatures, the minute differences might be hard to see on a visualiz
 terra::plot(terra::rast("Data/plan100.flt"), 
             main = "Planar Curvature at 100m")
 ```
+
+## Preparing for next step
+To make things easier for the next steps, I suggest combining all of the generated metrics into one object of type `list`. Since the FORTRAN file export the metrics, we will have to load them back into R. In addition, we will need to provide names inside of the object for each metric. This makes it so that the metrics will not only be loaded into one place, but also has names to help you (and the computer) differentiate between the different metrics. This is all shown below
+
+```{r, eval=FALSE}
+in_rasts <- list(grad100 = terra::rast("grad100.flt"),
+                 plan100 = terra::rast("plan100.flt"),
+                 prof100 = terra::rast("prof100.flt"))
+```
+
+While the later functions do work if they have inputs of filenames, you may find that it is far less tedious to just load them into R one time.

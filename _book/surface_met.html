@@ -116,25 +116,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-downloads" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Downloads</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
-        <li>
-    <a class="dropdown-item" href="./pdf_manual.pdf" rel="" target="">
- <span class="dropdown-text">Manual</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./template.rmd" rel="" target="">
+ <span class="menu-text">WIP Template</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./template.rmd" rel="" target="">
- <span class="dropdown-text">WIP Template</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./Data/fun.RData" rel="" target="">
+ <span class="menu-text">Functions</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./Data/fun.RData" rel="" target="">
- <span class="dropdown-text">Functions</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./ExecutableFiles" rel="" target="">
+ <span class="menu-text">Executables</span></a>
   </li>  
-    </ul>
-  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-example-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Example Data</span>
@@ -155,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/kaijeffreys/WIPbook" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/kaijeffreys/WIP" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -346,6 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#visualizing-output" id="toc-visualizing-output" class="nav-link" data-scroll-target="#visualizing-output">Visualizing output</a></li>
   </ul></li>
+  <li><a href="#preparing-for-next-step" id="toc-preparing-for-next-step" class="nav-link" data-scroll-target="#preparing-for-next-step">Preparing for next step</a></li>
   </ul>
 </nav>
     </div>
@@ -375,8 +369,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 90%">
+<col style="width: 18%">
+<col style="width: 81%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -407,21 +401,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="using-the-function" class="level2">
 <h2 class="anchored" data-anchor-id="using-the-function">Using the function</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>elev1 <span class="ot">&lt;-</span> <span class="fu">surface_met</span>(dem, <span class="at">len =</span> <span class="dv">20</span>, <span class="at">elev_dev =</span> <span class="fu">c</span>(<span class="st">"grad"</span>, <span class="st">"prof"</span>, <span class="st">"plan"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>elev1 <span class="ot">&lt;-</span> <span class="fu">surface_met</span>(dem, <span class="at">len =</span> <span class="dv">20</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">elev_dev =</span> <span class="fu">c</span>(<span class="st">"grad"</span>, <span class="st">"prof"</span>, <span class="st">"plan"</span>, <span class="st">"twi"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 |---------|---------|---------|---------|
 =========================================
                                           </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>elev2 <span class="ot">&lt;-</span> <span class="fu">surface_met</span>(dem, <span class="at">len =</span> <span class="dv">100</span>, <span class="at">elev_dev =</span> <span class="fu">c</span>(<span class="st">"grad"</span>, <span class="st">"prof"</span>, <span class="st">"plan"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>elev2 <span class="ot">&lt;-</span> <span class="fu">surface_met</span>(dem, <span class="at">len =</span> <span class="dv">100</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">elev_dev =</span> <span class="fu">c</span>(<span class="st">"grad"</span>, <span class="st">"prof"</span>, <span class="st">"plan"</span>, <span class="st">"dev"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 |---------|---------|---------|---------|
 =========================================
                                           </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>elev3 <span class="ot">&lt;-</span> <span class="fu">surface_met</span>(dem, <span class="at">len =</span> <span class="dv">10</span>, <span class="at">elev_dev =</span> <span class="fu">c</span>(<span class="st">"twi"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A progress bar is printed below a few of the functions, in case you were wondering what those odd lines were. This is added so that the user can have some semblance of how much is left to run. Most of the functions within the entirety of the tool do something similar, as they will often take some time to run.</p>
 <section id="visualizing-output" class="level3">
@@ -445,9 +440,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="surface_met_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="preparing-for-next-step" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-for-next-step">Preparing for next step</h2>
+<p>As with <code>surface_met1</code>, it is good practice to load up all the raster metrics in one place, since it will make things much easier later on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>in_rasts <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">grad20 =</span> elev1<span class="sc">$</span>grad20,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">plan20 =</span> elev1<span class="sc">$</span>plan20,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">prof20 =</span> elev1<span class="sc">$</span>prof20,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">grad100 =</span> elev2<span class="sc">$</span>grad100,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">plan100 =</span> elev2<span class="sc">$</span>plan100,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">prof100 =</span> elev2<span class="sc">$</span>prof100,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dev100 =</span> elev2<span class="sc">$</span>dev100,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">twi20 =</span> elev1<span class="sc">$</span>twi20)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If all of the needed metrics were generated just from <code>surface_met</code>, then we can just combine them with a vector, as seen below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>in_rasts <span class="ot">&lt;-</span> <span class="fu">c</span>(elev1, elev2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Doing this keeps them in a list format, with the key names still attached to each type of metric.</p>
+<p>In addition, if you want to just keep one scale of metrics (like the grad, prof, plan, etc. of just 100m) in the later models, then there is no combination of elements needed! Just keep the returned object from the <code>surface_met</code> function</p>
+
+
 </section>
 
 </main> <!-- /main -->

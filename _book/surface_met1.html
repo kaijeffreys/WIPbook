@@ -116,25 +116,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-downloads" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Downloads</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
-        <li>
-    <a class="dropdown-item" href="./pdf_manual.pdf" rel="" target="">
- <span class="dropdown-text">Manual</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./template.rmd" rel="" target="">
+ <span class="menu-text">WIP Template</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./template.rmd" rel="" target="">
- <span class="dropdown-text">WIP Template</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./Data/fun.RData" rel="" target="">
+ <span class="menu-text">Functions</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./Data/fun.RData" rel="" target="">
- <span class="dropdown-text">Functions</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./ExecutableFiles" rel="" target="">
+ <span class="menu-text">Executables</span></a>
   </li>  
-    </ul>
-  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-example-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Example Data</span>
@@ -155,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/kaijeffreys/WIPbook" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/kaijeffreys/WIP" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -346,6 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#visuals-of-example" id="toc-visuals-of-example" class="nav-link" data-scroll-target="#visuals-of-example">Visuals of example</a></li>
   </ul></li>
+  <li><a href="#preparing-for-next-step" id="toc-preparing-for-next-step" class="nav-link" data-scroll-target="#preparing-for-next-step">Preparing for next step</a></li>
   </ul>
 </nav>
     </div>
@@ -369,14 +363,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed <a href="https://github.com/TerrainWorks-Seattle/ForestedWetlands">here</a>, produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.</p>
+<p>The first option we have is to calculate them using Executable files. These Executable files are files of FORTRAN code that are executed quickly. These files, which can be accessed by clicking the <em>Executables</em> tab in the right corner, produce the output(s) on an exported file and not in R itself, so you would have to load in the data once again.</p>
 <p>Running the <code>surface_met1</code> function sets up the bridge between R and the Executable files. There are a few differences between running this function versus the <code>surface_met</code> function. Since the files are run externally, the user needs to type in the file directories rather than the variable in R. Another thing to note is that currently there is not a setup to run TWI with these files, so we are limited to just the other four types of metrics</p>
 <section id="parameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
 <colgroup>
-<col style="width: 19%">
-<col style="width: 80%">
+<col style="width: 23%">
+<col style="width: 76%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -434,9 +428,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="surface_met1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="preparing-for-next-step" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-for-next-step">Preparing for next step</h2>
+<p>To make things easier for the next steps, I suggest combining all of the generated metrics into one object of type <code>list</code>. Since the FORTRAN file export the metrics, we will have to load them back into R. In addition, we will need to provide names inside of the object for each metric. This makes it so that the metrics will not only be loaded into one place, but also has names to help you (and the computer) differentiate between the different metrics. This is all shown below</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>in_rasts <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">grad100 =</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"grad100.flt"</span>),</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">plan100 =</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"plan100.flt"</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">prof100 =</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"prof100.flt"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>While the later functions do work if they have inputs of filenames, you may find that it is far less tedious to just load them into R one time.</p>
+
+
 </section>
 
 </main> <!-- /main -->

@@ -116,25 +116,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-downloads" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Downloads</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
-        <li>
-    <a class="dropdown-item" href="./pdf_manual.pdf" rel="" target="">
- <span class="dropdown-text">Manual</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./template.rmd" rel="" target="">
+ <span class="menu-text">WIP Template</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./template.rmd" rel="" target="">
- <span class="dropdown-text">WIP Template</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./Data/fun.RData" rel="" target="">
+ <span class="menu-text">Functions</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./Data/fun.RData" rel="" target="">
- <span class="dropdown-text">Functions</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./ExecutableFiles" rel="" target="">
+ <span class="menu-text">Executables</span></a>
   </li>  
-    </ul>
-  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-example-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Example Data</span>
@@ -155,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/kaijeffreys/WIPbook" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/kaijeffreys/WIP" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -373,8 +366,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
 <table class="table">
 <colgroup>
-<col style="width: 22%">
-<col style="width: 77%">
+<col style="width: 8%">
+<col style="width: 91%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -413,31 +406,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<p>If you have trouble obtaining a ideal region shape file, but have a DEM (or some other raster file of the area of interest), one line of code is able to solve this as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>region <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">as.polygons</span>(dem <span class="sc">&gt;</span> <span class="sc">-</span><span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What this code does is check which cells have actual values (or not NAs), and then builds one polygon around all those values, creating an overall region shape.</p>
 </section>
 <section id="running-training-points" class="level2">
 <h2 class="anchored" data-anchor-id="running-training-points">Running training points</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>simple_pts <span class="ot">&lt;-</span> <span class="fu">build_train_pts</span>(<span class="at">region_poly =</span> region,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">wet_poly =</span> wetlands,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">wet_types =</span> <span class="fu">c</span>(<span class="st">"Riverine"</span>, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Emergent Wetland"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Forested/Shrub Wetland"</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Pond"</span>),</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">multi_class =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>multi_pts <span class="ot">&lt;-</span> <span class="fu">build_train_pts</span>(<span class="at">region_poly =</span> region,</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>simple_pts <span class="ot">&lt;-</span> <span class="fu">build_train_pts</span>(<span class="at">region_poly =</span> region,</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">wet_poly =</span> wetlands,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">wet_types =</span> <span class="fu">c</span>(<span class="st">"Riverine"</span>, </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Emergent Wetland"</span>,</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Forested/Shrub Wetland"</span>,</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Pond"</span>),</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">sample_points =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">150</span>),</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">multi_class =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">multi_class =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>multi_pts <span class="ot">&lt;-</span> <span class="fu">build_train_pts</span>(<span class="at">region_poly =</span> region,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">wet_poly =</span> wetlands,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">wet_types =</span> <span class="fu">c</span>(<span class="st">"Riverine"</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Emergent Wetland"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Forested/Shrub Wetland"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">"Freshwater Pond"</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">sample_points =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">150</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">multi_class =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>If you run this function, as is done above, it returns a Spatvector input of points, with some labeled as UPL (for upland) and others either labeled as WET or, if chosen <code>multi_class</code>, the particular type of wetland (such as Freshwater Pond), as shown below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>multi_pts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>multi_pts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> class       : SpatVector 
  geometry    : points 
@@ -454,12 +452,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Here’s a visual of what the training points look like</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="train_pts_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<p><img src="train_pts_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>If you run the function without specifying the <code>wet_type</code>, it might still run (especially if the data was obtained from NWI), but it will also likely give warnings, for some wetland types that are not present in the file, as shown below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">build_train_pts</span>(region, wetlands)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">build_train_pts</span>(region, wetlands)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in build_train_pts(region, wetlands): Estuarine and Marine Wetland not
+found!</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in build_train_pts(region, wetlands): Lake not found!</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in build_train_pts(region, wetlands): Estuarine and Marine Deepwater
+not found!</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in build_train_pts(region, wetlands): Other not found!</code></pre>
+</div>
 <div class="cell-output cell-output-stdout">
 <pre><code> class       : SpatVector 
  geometry    : points 
@@ -473,6 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                   WET</code></pre>
 </div>
 </div>
+<p>Another possible problem that may come when running <code>build_train_pts</code>, is that the function may end up generating a different number of points than desired. This could happen when generating binary points. The number will likely only be off by a few points. In addition, there will be a printed warning describing how many wetland points were generated</p>
 </section>
 <section id="external-training-points" class="level2">
 <h2 class="anchored" data-anchor-id="external-training-points">External Training Points</h2>

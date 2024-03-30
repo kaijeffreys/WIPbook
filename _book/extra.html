@@ -116,25 +116,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-downloads" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Downloads</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
-        <li>
-    <a class="dropdown-item" href="./pdf_manual.pdf" rel="" target="">
- <span class="dropdown-text">Manual</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./template.rmd" rel="" target="">
+ <span class="menu-text">WIP Template</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./template.rmd" rel="" target="">
- <span class="dropdown-text">WIP Template</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./Data/fun.RData" rel="" target="">
+ <span class="menu-text">Functions</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./Data/fun.RData" rel="" target="">
- <span class="dropdown-text">Functions</span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./ExecutableFiles" rel="" target="">
+ <span class="menu-text">Executables</span></a>
   </li>  
-    </ul>
-  </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-example-data" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Example Data</span>
@@ -155,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/kaijeffreys/WIPbook" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/kaijeffreys/WIP" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -463,6 +456,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Incorrect input in <code>wet_types</code>, meaning that the function is searching for wetlands that are actually not there</p></li>
 <li><p>Incorrect input in <code>wet_field</code>, which means that the function can’t find where the types of wetlands are listed. This will happen when the wetlands are from a different database than NWI. To figure out what the field name is, try using the <code>names()</code> function and then see which field is most likely to contain the wetland types, then type that into <code>wet_field</code></p></li>
 </ul></li>
+<li><p><code>NA/NaN/Inf in foreign function call</code> is an error that may come when running <code>build_model</code> or <code>run_model</code>. However, the stem of this error likely comes from the calculation of Topographical Wetness Index (TWI) values, which may produce infinite values. If this happens, the best way past it is simply to not include TWI in the creation of the model.</p></li>
 </ul>
 <p>However, if a different error shows up, keep in mind that usually the best way to solve an error is to copy the error message R puts up, and then paste it into a search engine. It might seem like a cheat and a bit lazy, but it is a very successful debugging tactic.</p>
 
